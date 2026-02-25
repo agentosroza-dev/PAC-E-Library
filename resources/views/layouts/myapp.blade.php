@@ -943,11 +943,11 @@
 
     <!-- Initialize Tooltips -->
     <script>
-        // Initialize Bootstrap tooltips
-        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-            return new bootstrap.Tooltip(tooltipTriggerEl)
-        });
+        // // Initialize Bootstrap tooltips
+        // var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        // var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        //     return new bootstrap.Tooltip(tooltipTriggerEl)
+        // });
 
         // Sidebar search functionality
         document.getElementById('sidebarSearch')?.addEventListener('keyup', function () {
@@ -1069,9 +1069,12 @@
         }
 
     </script>
+
     @yield('scripts')
     @push('scripts')
     @stack('scripts')
+
+    
 </body>
 
 </html>

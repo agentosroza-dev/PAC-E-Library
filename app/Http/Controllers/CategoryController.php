@@ -72,10 +72,12 @@ class CategoryController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Category $category)  // Changed from Category $id
-    {
-        $category->delete();  // Directly delete the route model binding instance
+public function destroy($id)
+{
+    $category = Category::findOrFail($id);
+    $category->delete();
 
-        return redirect()->route('categories.index')->with('success', 'Category deleted successfully!');
-    }
+    return redirect()->route('categories.index')
+        ->with('success', 'Category deleted successfully!');
+}
 }
