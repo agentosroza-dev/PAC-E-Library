@@ -1,5 +1,5 @@
 {
-  "name": "vite-project",
+  "name": "frontend",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -9,10 +9,24 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "vue": "^3.5.25"
+    "axios": "^1.13.5",
+    "dayjs": "^1.11.19",
+    "husky": "^9.1.7",
+    "laravel-echo": "^2.3.0",
+    "pinia": "^3.0.4",
+    "pusher-js": "^8.4.0",
+    "sweetalert2": "^11.26.20",
+    "vue": "^3.5.25",
+    "vue-i18n": "^11.1.12",
+    "vue-router": "^4.6.4",
+    "vuex": "^4.1.0"
   },
   "devDependencies": {
+    "@rollup/rollup-win32-x64-msvc": "^4.59.0",
+    "@tailwindcss/vite": "^4.2.1",
     "@vitejs/plugin-vue": "^6.0.2",
-    "vite": "^7.3.1"
+    "nodemon": "^3.1.10",
+    "vite": "^7.3.1",
+    "vite-plugin-pwa": "^1.2.0"
   }
 }
