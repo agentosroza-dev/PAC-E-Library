@@ -1,4 +1,5 @@
-{{-- <!DOCTYPE html>
+{{--
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -73,7 +74,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         document.querySelectorAll('.btn-delete').forEach(button => {
-            button.addEventListener('click', function(e) {
+            button.addEventListener('click', function (e) {
                 let form = this.closest('form');
                 Swal.fire({
                     title: "Are you sure?",
@@ -98,7 +99,7 @@
 </html> --}}
 
 <!DOCTYPE html>
-<html lang="km"  data-bs-theme="light">
+<html lang="km" data-bs-theme="light">
 
 <head>
     <meta charset="UTF-8">
@@ -112,7 +113,8 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
     <!-- Google Fonts - Khmer -->
-    <link href="https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
 
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -131,12 +133,12 @@
         .navbar-custom {
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
             padding: 15px 0;
             position: sticky;
             top: 0;
             z-index: 1000;
-            border-bottom: 1px solid rgba(0,0,0,0.05);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
         }
 
         .navbar-brand {
@@ -162,10 +164,10 @@
         /* ===== Sidebar ===== */
         .sidebar {
             background: white;
-            box-shadow: 5px 0 20px rgba(0,0,0,0.05);
+            box-shadow: 5px 0 20px rgba(0, 0, 0, 0.05);
             min-height: calc(100vh - 80px);
             transition: all 0.3s ease;
-            border-right: 1px solid rgba(0,0,0,0.05);
+            border-right: 1px solid rgba(0, 0, 0, 0.05);
             padding: 20px 0;
         }
 
@@ -255,7 +257,7 @@
         .dropdown-menu-custom {
             border: none;
             border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
             padding: 10px;
             min-width: 200px;
             animation: slideIn 0.3s ease;
@@ -290,6 +292,7 @@
                 opacity: 0;
                 transform: translateY(-10px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -307,7 +310,7 @@
             background: white;
             padding: 20px 25px;
             border-radius: 15px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
             margin-bottom: 30px;
             display: flex;
             align-items: center;
@@ -359,7 +362,7 @@
             border: none;
             padding: 12px 25px;
             border-radius: 30px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
             color: #2c3e50;
             font-weight: 500;
             display: inline-flex;
@@ -397,7 +400,7 @@
             background: white;
             border-radius: 15px;
             padding: 25px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -440,7 +443,7 @@
         .content-card {
             background: white;
             border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
             padding: 30px;
             border: none;
             transition: all 0.3s ease;
@@ -448,7 +451,7 @@
 
         .content-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
         }
 
         /* ===== Table Styles ===== */
@@ -477,7 +480,7 @@
 
         .table-custom tbody tr {
             background: white;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
             border-radius: 10px;
             transition: all 0.3s ease;
         }
@@ -517,7 +520,7 @@
 
         .btn-action:hover {
             transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         }
 
         .btn-gradient-primary {
@@ -612,7 +615,7 @@
             margin-bottom: 20px;
             animation: slideInRight 0.5s ease;
             border: none;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
         }
 
         .alert-success-custom {
@@ -727,246 +730,246 @@
 
 
     @auth
-    <div class="d-flex">
-    <!-- Top sidebar -->
-    @include('components.sidebar')
+        <div class="d-flex">
+            <!-- Top sidebar -->
+            @include('components.sidebar')
 
 
-        <!-- Main Content -->
-        <main class="main-content flex-grow-1">
-            <!-- Page Header -->
-            {{-- <div class="page-header">
+            <!-- Main Content -->
+            <main class="main-content flex-grow-1">
+                <!-- Page Header -->
+                {{-- <div class="page-header">
 
-                <h3 class="page-title">
-                    <i class="fa-regular fa-@yield('page-icon', 'file')"></i>
-                    @yield('title')
-                </h3>
+                    <h3 class="page-title">
+                        <i class="fa-regular fa-@yield('page-icon', 'file')"></i>
+                        @yield('title')
+                    </h3>
 
-            </div> --}}
+                </div> --}}
 
-            <div class="page-header d-flex justify-content-between align-items-center flex-wrap">
-    <h3 class="page-title mb-2 mb-md-0">
-        <i class="fa-regular fa-@yield('page-icon', 'file')"></i>
-        @yield('title')
-    </h3>
+                <div class="page-header d-flex justify-content-between align-items-center flex-wrap">
+                    <h3 class="page-title mb-2 mb-md-0">
+                        <i class="fa-regular fa-@yield('page-icon', 'file')"></i>
+                        @yield('title')
+                    </h3>
 
-    <!-- Breadcrumbs -->
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb mb-0">
-            <li class="breadcrumb-item">
-                <a href="{{ route('home') }}" class="text-decoration-none">
-                   <i class="bi bi-house-door me-1"></i>ទំព័រដើម
-                </a>
-            </li>
-            @yield('breadcrumb')
-        </ol>
-    </nav>
-</div>
-
-            <!-- Quick Actions -->
-            <div class="quick-actions">
-                @yield('actions')
-            </div>
-
-            <!-- Flash Messages -->
-            @if(session('success'))
-                <div class="alert alert-custom alert-success-custom alert-dismissible fade show" role="alert">
-                    <i class="fas fa-check-circle me-2"></i>
-                    {{ session('success') }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    <!-- Breadcrumbs -->
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb mb-0">
+                            <li class="breadcrumb-item">
+                                <a href="{{ route('home') }}" class="text-decoration-none">
+                                    <i class="bi bi-house-door me-1"></i>ទំព័រដើម
+                                </a>
+                            </li>
+                            @yield('breadcrumb')
+                        </ol>
+                    </nav>
                 </div>
-            @endif
 
-            @if(session('error'))
-                <div class="alert alert-custom alert-error-custom alert-dismissible fade show" role="alert">
-                    <i class="fas fa-exclamation-circle me-2"></i>
-                    {{ session('error') }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                <!-- Quick Actions -->
+                <div class="quick-actions">
+                    @yield('actions')
                 </div>
-            @endif
 
-            @if($errors->any())
-                <div class="alert alert-custom alert-warning-custom alert-dismissible fade show" role="alert">
-                    <i class="fas fa-exclamation-triangle me-2"></i>
-                    <strong>សូមពិនិត្យមើលកំហុសខាងក្រោម៖</strong>
-                    <ul class="mb-0 mt-2">
-                        @foreach($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                <!-- Flash Messages -->
+                @if(session('success'))
+                    <div class="alert alert-custom alert-success-custom alert-dismissible fade show" role="alert">
+                        <i class="fas fa-check-circle me-2"></i>
+                        {{ session('success') }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                @endif
+
+                @if(session('error'))
+                    <div class="alert alert-custom alert-error-custom alert-dismissible fade show" role="alert">
+                        <i class="fas fa-exclamation-circle me-2"></i>
+                        {{ session('error') }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                @endif
+
+                @if($errors->any())
+                    <div class="alert alert-custom alert-warning-custom alert-dismissible fade show" role="alert">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        <strong>សូមពិនិត្យមើលកំហុសខាងក្រោម៖</strong>
+                        <ul class="mb-0 mt-2">
+                            @foreach($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                @endif
+
+                <!-- Main Content Card -->
+                <div class="content-card">
+                    @yield('content')
                 </div>
-            @endif
+                @include('components.footer')
+            </main>
 
-            <!-- Main Content Card -->
-            <div class="content-card">
-                @yield('content')
-            </div>
-             @include('components.footer')
-        </main>
+        </div>
 
-    </div>
-
-    <!-- Add this CSS -->
-    <style>
-        /* Sidebar Styles */
-        .sidebar {
-            background: white;
-            box-shadow: 5px 0 25px rgba(0, 0, 0, 0.05);
-            min-height: 100vh;
-            transition: all 0.3s ease;
-            border-right: 1px solid rgba(0, 0, 0, 0.05);
-            display: flex;
-            flex-direction: column;
-            width: 280px;
-        }
-
-        /* User Profile Section */
-        .user-profile-section {
-            background: linear-gradient(135deg, #f8f9fa, #ffffff);
-            border-bottom: 1px solid #e9ecef;
-        }
-
-        /* Avatar Styles */
-        .avatar {
-            transition: all 0.3s ease;
-        }
-
-        .avatar:hover {
-            transform: scale(1.05);
-        }
-
-        /* Navigation Items */
-        .nav-item-custom {
-            transition: all 0.2s ease;
-        }
-
-        .nav-link-custom {
-            text-decoration: none;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .nav-link-custom:hover {
-            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
-            transform: translateX(5px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-        }
-
-        .nav-link-custom.active {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
-        }
-
-        .nav-link-custom.active i {
-            color: white !important;
-        }
-
-        .nav-link-custom.active:hover {
-            transform: translateX(5px);
-        }
-
-        /* Submenu Styles */
-        .nav-sub-link {
-            transition: all 0.3s ease;
-            font-size: 0.9rem;
-        }
-
-        .nav-sub-link:hover {
-            background: #f8f9fa;
-            color: #667eea !important;
-            transform: translateX(5px);
-        }
-
-        .nav-sub-link.active {
-            background: #f8f9fa;
-            color: #667eea !important;
-            font-weight: 500;
-        }
-
-        /* Rotate chevron when expanded */
-        [aria-expanded="true"] .fa-chevron-right {
-            transform: rotate(90deg);
-        }
-
-        .fa-chevron-right {
-            transition: transform 0.3s ease;
-        }
-
-        /* Search Wrapper */
-        .search-wrapper {
-            position: relative;
-        }
-
-        .search-wrapper input {
-            transition: all 0.3s ease;
-        }
-
-        .search-wrapper input:focus {
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-            outline: none;
-        }
-
-        /* System Info Card */
-        .bg-gradient-light {
-            background: linear-gradient(135deg, #f8f9fa, #ffffff);
-        }
-
-        /* Tooltip Styles */
-        [data-bs-toggle="tooltip"] {
-            cursor: pointer;
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
+        <!-- Add this CSS -->
+        <style>
+            /* Sidebar Styles */
             .sidebar {
-                position: fixed;
-                left: -280px;
-                top: 80px;
+                background: white;
+                box-shadow: 5px 0 25px rgba(0, 0, 0, 0.05);
+                min-height: 100vh;
+                transition: all 0.3s ease;
+                border-right: 1px solid rgba(0, 0, 0, 0.05);
+                display: flex;
+                flex-direction: column;
                 width: 280px;
-                height: calc(100vh - 80px);
-                z-index: 999;
-                overflow-y: auto;
-                box-shadow: 5px 0 30px rgba(0, 0, 0, 0.15);
             }
 
-            .sidebar.active {
-                left: 0;
-            }
-
+            /* User Profile Section */
             .user-profile-section {
-                padding: 15px !important;
+                background: linear-gradient(135deg, #f8f9fa, #ffffff);
+                border-bottom: 1px solid #e9ecef;
             }
-        }
-    </style>
 
-    <!-- Initialize Tooltips -->
-    <script>
-        // // Initialize Bootstrap tooltips
-        // var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-        // var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-        //     return new bootstrap.Tooltip(tooltipTriggerEl)
-        // });
+            /* Avatar Styles */
+            .avatar {
+                transition: all 0.3s ease;
+            }
 
-        // Sidebar search functionality
-        document.getElementById('sidebarSearch')?.addEventListener('keyup', function () {
-            let searchTerm = this.value.toLowerCase();
-            let menuItems = document.querySelectorAll('.nav-link-custom');
+            .avatar:hover {
+                transform: scale(1.05);
+            }
 
-            menuItems.forEach(item => {
-                let text = item.textContent.toLowerCase();
-                let parent = item.closest('.nav-item-custom');
+            /* Navigation Items */
+            .nav-item-custom {
+                transition: all 0.2s ease;
+            }
 
-                if (text.includes(searchTerm)) {
-                    parent.style.display = 'block';
-                } else {
-                    parent.style.display = 'none';
+            .nav-link-custom {
+                text-decoration: none;
+                transition: all 0.3s ease;
+                position: relative;
+                overflow: hidden;
+            }
+
+            .nav-link-custom:hover {
+                background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+                transform: translateX(5px);
+                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            }
+
+            .nav-link-custom.active {
+                background: linear-gradient(135deg, #667eea, #764ba2);
+                box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+            }
+
+            .nav-link-custom.active i {
+                color: white !important;
+            }
+
+            .nav-link-custom.active:hover {
+                transform: translateX(5px);
+            }
+
+            /* Submenu Styles */
+            .nav-sub-link {
+                transition: all 0.3s ease;
+                font-size: 0.9rem;
+            }
+
+            .nav-sub-link:hover {
+                background: #f8f9fa;
+                color: #667eea !important;
+                transform: translateX(5px);
+            }
+
+            .nav-sub-link.active {
+                background: #f8f9fa;
+                color: #667eea !important;
+                font-weight: 500;
+            }
+
+            /* Rotate chevron when expanded */
+            [aria-expanded="true"] .fa-chevron-right {
+                transform: rotate(90deg);
+            }
+
+            .fa-chevron-right {
+                transition: transform 0.3s ease;
+            }
+
+            /* Search Wrapper */
+            .search-wrapper {
+                position: relative;
+            }
+
+            .search-wrapper input {
+                transition: all 0.3s ease;
+            }
+
+            .search-wrapper input:focus {
+                box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+                outline: none;
+            }
+
+            /* System Info Card */
+            .bg-gradient-light {
+                background: linear-gradient(135deg, #f8f9fa, #ffffff);
+            }
+
+            /* Tooltip Styles */
+            [data-bs-toggle="tooltip"] {
+                cursor: pointer;
+            }
+
+            /* Responsive */
+            @media (max-width: 768px) {
+                .sidebar {
+                    position: fixed;
+                    left: -280px;
+                    top: 80px;
+                    width: 280px;
+                    height: calc(100vh - 80px);
+                    z-index: 999;
+                    overflow-y: auto;
+                    box-shadow: 5px 0 30px rgba(0, 0, 0, 0.15);
                 }
+
+                .sidebar.active {
+                    left: 0;
+                }
+
+                .user-profile-section {
+                    padding: 15px !important;
+                }
+            }
+        </style>
+
+        <!-- Initialize Tooltips -->
+        <script>
+            // // Initialize Bootstrap tooltips
+            // var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+            // var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            //     return new bootstrap.Tooltip(tooltipTriggerEl)
+            // });
+
+            // Sidebar search functionality
+            document.getElementById('sidebarSearch')?.addEventListener('keyup', function () {
+                let searchTerm = this.value.toLowerCase();
+                let menuItems = document.querySelectorAll('.nav-link-custom');
+
+                menuItems.forEach(item => {
+                    let text = item.textContent.toLowerCase();
+                    let parent = item.closest('.nav-item-custom');
+
+                    if (text.includes(searchTerm)) {
+                        parent.style.display = 'block';
+                    } else {
+                        parent.style.display = 'none';
+                    }
+                });
             });
-        });
-    </script>
-@endauth
+        </script>
+    @endauth
 
 
 
@@ -1032,21 +1035,21 @@
 
         // Sidebar toggle for mobile (តែពេលមាន sidebar)
         @auth
-        document.getElementById('sidebarToggle')?.addEventListener('click', function() {
-            document.getElementById('sidebar').classList.toggle('active');
-        });
+            document.getElementById('sidebarToggle')?.addEventListener('click', function () {
+                document.getElementById('sidebar').classList.toggle('active');
+            });
 
-        // Close sidebar when clicking outside on mobile
-        document.addEventListener('click', function(e) {
-            const sidebar = document.getElementById('sidebar');
-            const toggleBtn = document.getElementById('sidebarToggle');
+            // Close sidebar when clicking outside on mobile
+            document.addEventListener('click', function (e) {
+                const sidebar = document.getElementById('sidebar');
+                const toggleBtn = document.getElementById('sidebarToggle');
 
-            if (window.innerWidth <= 768) {
-                if (sidebar && toggleBtn && !sidebar.contains(e.target) && !toggleBtn.contains(e.target)) {
-                    sidebar.classList.remove('active');
+                if (window.innerWidth <= 768) {
+                    if (sidebar && toggleBtn && !sidebar.contains(e.target) && !toggleBtn.contains(e.target)) {
+                        sidebar.classList.remove('active');
+                    }
                 }
-            }
-        });
+            });
         @endauth
 
         // Logout confirmation
@@ -1070,11 +1073,16 @@
 
     </script>
 
+
+    @yield('styles')
+    @push('styles')
+    @stack('styles')
+
     @yield('scripts')
     @push('scripts')
     @stack('scripts')
 
-    
+
 </body>
 
 </html>

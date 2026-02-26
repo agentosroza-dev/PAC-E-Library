@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\BackupController;
-use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\PdfCategoryController;
 use App\Http\Controllers\PdfBookController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -42,7 +42,7 @@ Route::middleware(['auth'])->group(function () {
             Route::delete('/delete/{filename}', [BackupController::class, 'deleteBackup'])->name('delete');
         });
         // Categories management - ត្រូវប្រាកដថាមាននេះ
-        Route::resource('categories', CategoryController::class);
+        Route::resource('pdf-categories', PdfCategoryController::class);
 
         // Reset routes for PDF Books (admin only)
         Route::post('/pdf-books/{pdfBook}/reset-downloads', [PdfBookController::class, 'resetDownloads'])

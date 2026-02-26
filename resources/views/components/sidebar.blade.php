@@ -165,8 +165,8 @@
                                 <i class="fas fa-plus me-2" style="font-size: 0.8rem;"></i>
                                 បន្ថែមថ្មី
                             </a>
-                            <a href="{{ route('categories.index') }}"
-                                class="d-block nav-sub-link px-3 py-2 rounded-3 mb-1 {{ request()->routeIs('categories.index') ? 'active bg-light text-primary' : 'text-muted' }}"
+                            <a href="{{ route('pdf-categories.index') }}"
+                                class="d-block nav-sub-link px-3 py-2 rounded-3 mb-1 {{ request()->routeIs('pdf-categories.index') ? 'active bg-light text-primary' : 'text-muted' }}"
                                 style="text-decoration: none;">
                                 <i class="fas fa-plus me-2" style="font-size: 0.8rem;"></i>
                                 ប្រភេទសៀវភៅ
@@ -179,15 +179,15 @@
                 @if (Auth::check() && Auth::user()->level === 'admin')
 
                     <div class="nav-item-custom mb-1">
-                        <a href="{{ route('categories.index') }}"
-                            class="nav-link-custom d-flex align-items-center px-3 py-2 rounded-3 {{ request()->routeIs('categories.*') ? 'active bg-gradient-primary text-white' : 'text-dark' }}"
+                        <a href="{{ route('pdf-categories.index') }}"
+                            class="nav-link-custom d-flex align-items-center px-3 py-2 rounded-3 {{ request()->routeIs('pdf-categories.*') ? 'active bg-gradient-primary text-white' : 'text-dark' }}"
                             data-bs-toggle="tooltip" title="គ្រប់គ្រងប្រភេទ">
-                            <i class="fas fa-tags me-3 {{ request()->routeIs('categories.*') ? 'text-white' : 'text-primary' }}"
+                            <i class="fas fa-tags me-3 {{ request()->routeIs('pdf-categories.*') ? 'text-white' : 'text-primary' }}"
                                 style="width: 20px;"></i>
                             <span class="flex-grow-1">ប្រភេទ</span>
 
                             <!-- Admin Badge (optional) -->
-                            @if (request()->routeIs('categories.*'))
+                            @if (request()->routeIs('pdf-categories.*'))
                                 <span class="badge bg-white text-primary ms-2 rounded-pill px-2 py-1">
                                     <i class="fas fa-crown me-1" style="font-size: 0.7rem;"></i>
                                     Admin

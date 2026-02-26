@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Cache;
 
 class PdfBook extends Model
 {
@@ -14,12 +15,13 @@ class PdfBook extends Model
         'title',
         'description',
         'category_id',
+        'uploaded_by', // Added missing field
         'status',
         'version',
         'image',
         'file',
         'downloads',
-        'userview' // បន្ថែម userview ទៅក្នុង fillable
+        'userview'
     ];
 
     /**
@@ -30,7 +32,7 @@ class PdfBook extends Model
     protected $casts = [
         'status' => 'boolean',
         'downloads' => 'integer',
-        'userview' => 'integer', // បន្ថែម cast សម្រាប់ userview
+        'userview' => 'integer',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];
@@ -40,7 +42,15 @@ class PdfBook extends Model
      */
     public function category()
     {
-        return $this->belongsTo(Category::class, 'category_id', 'id');
+        return $this->belongsTo(PdfCategory::class, 'category_id', 'id'); // FIXED: Correct foreign key
+    }
+
+    /**
+     * Get the user who uploaded the book.
+     */
+    public function uploader()
+    {
+        return $this->belongsTo(User::class, 'uploaded_by', 'id');
     }
 
     /**
@@ -121,7 +131,7 @@ class PdfBook extends Model
         $ip = request()->ip();
         $cacheKey = "download_{$this->id}_{$ip}";
 
-        if (cache()->has($cacheKey)) {
+        if (Cache::has($cacheKey)) {
             \Log::warning('Duplicate download attempt prevented', [
                 'book_id' => $this->id,
                 'ip' => $ip
@@ -129,37 +139,37 @@ class PdfBook extends Model
             return false;
         }
 
-        // Set cache for 6 seconds
-        cache()->put($cacheKey, true, now()->addSeconds($seconds));
+        Cache::put($cacheKey, true, now()->addSeconds($seconds));
 
-        return $this->increment('downloads');
+        $this->increment('downloads');
+        return true;
     }
 
     /**
-     * Increment user view count.
+     * Increment user view count with rate limiting.
      *
      * @return bool
      */
-public function incrementUserView($seconds = 3)
-{
-    $ip = request()->ip();
-    $cacheKey = "view_{$this->id}_{$ip}";
+    public function incrementUserView($seconds = 3)
+    {
+        $ip = request()->ip();
+        $cacheKey = "view_{$this->id}_{$ip}";
 
-    if (cache()->has($cacheKey)) {
-        \Log::info('Duplicate view attempt prevented', [
-            'book_id' => $this->id,
-            'title' => $this->title,
-            'ip' => $ip,
-            'timestamp' => now()->toDateTimeString()
-        ]);
-        return false;
+        if (Cache::has($cacheKey)) {
+            \Log::info('Duplicate view attempt prevented', [
+                'book_id' => $this->id,
+                'title' => $this->title,
+                'ip' => $ip,
+                'timestamp' => now()->toDateTimeString()
+            ]);
+            return false;
+        }
+
+        Cache::put($cacheKey, true, now()->addSeconds($seconds));
+
+        $this->increment('userview');
+        return true;
     }
-
-    // Set cache for specified seconds
-    cache()->put($cacheKey, true, now()->addSeconds($seconds));
-
-    return $this->increment('userview');
-}
 
     /**
      * Increment user view with session-based rate limiting.
@@ -175,28 +185,8 @@ public function incrementUserView($seconds = 3)
         }
 
         session()->put($sessionKey, true);
-
-        return $this->increment('userview');
-    }
-
-    /**
-     * Increment user view with IP-based rate limiting.
-     *
-     * @return bool
-     */
-    public function incrementUserViewWithIp()
-    {
-        $ip = request()->ip();
-        $cacheKey = "view_{$this->id}_{$ip}";
-
-        if (cache()->has($cacheKey)) {
-            return false;
-        }
-
-        // Set cache for 1 hour (3600 seconds)
-        cache()->put($cacheKey, true, now()->addHours(1));
-
-        return $this->increment('userview');
+        $this->increment('userview');
+        return true;
     }
 
     /**
@@ -240,70 +230,6 @@ public function incrementUserView($seconds = 3)
     }
 
     /**
-     * Get the total number of books with file.
-     *
-     * @return int
-     */
-    public static function getTotalBooksWithFile()
-    {
-        return self::whereNotNull('file')->count();
-    }
-
-    /**
-     * Get the total number of books without file.
-     *
-     * @return int
-     */
-    public static function getTotalBooksWithoutFile()
-    {
-        return self::whereNull('file')->count();
-    }
-
-    /**
-     * Get the total number of books with image.
-     *
-     * @return int
-     */
-    public static function getTotalBooksWithImage()
-    {
-        return self::whereNotNull('image')->count();
-    }
-
-    /**
-     * Get the total number of books by category.
-     *
-     * @param int $categoryId
-     * @return int
-     */
-    public static function getTotalBooksByCategory($categoryId)
-    {
-        return self::where('category_id', $categoryId)->count();
-    }
-
-    /**
-     * Get the total number of books grouped by category.
-     *
-     * @return \Illuminate\Support\Collection
-     */
-    public static function getTotalBooksGroupedByCategory()
-    {
-        return self::selectRaw('category_id, count(*) as total')
-            ->with('category')
-            ->groupBy('category_id')
-            ->get();
-    }
-
-    /**
-     * Get the total number of downloads.
-     *
-     * @return int
-     */
-    public static function getTotalDownloads()
-    {
-        return self::sum('downloads');
-    }
-
-    /**
      * Get statistics for dashboard.
      *
      * @return array
@@ -314,15 +240,11 @@ public function incrementUserView($seconds = 3)
             'total_books' => self::count(),
             'active_books' => self::where('status', true)->count(),
             'inactive_books' => self::where('status', false)->count(),
-            'books_with_file' => self::whereNotNull('file')->count(),
-            'books_without_file' => self::whereNull('file')->count(),
-            'books_with_image' => self::whereNotNull('image')->count(),
-            'books_without_image' => self::whereNull('image')->count(),
-            'categories_count' => Category::count(),
-            'total_downloads' => self::getTotalDownloads(),
-            'total_views' => self::getTotalUserViews(), // បន្ថែម total views
-            'most_downloaded' => self::mostDownloaded()->get(),
-            'most_viewed' => self::mostViewed()->get(), // បន្ថែម most viewed
+            'categories_count' => PdfCategory::count(),
+            'total_downloads' => self::sum('downloads'),
+            'total_views' => self::sum('userview'),
+            'most_downloaded' => self::with('category')->mostDownloaded(5)->get(),
+            'most_viewed' => self::with('category')->mostViewed(5)->get(),
         ];
     }
 
@@ -350,30 +272,6 @@ public function incrementUserView($seconds = 3)
         }
 
         return round($bytes, 2) . ' ' . $units[$i];
-    }
-
-    /**
-     * Get the file extension.
-     *
-     * @return string|null
-     */
-    public function getFileExtensionAttribute()
-    {
-        if (!$this->file) {
-            return null;
-        }
-
-        return strtolower(pathinfo($this->file, PATHINFO_EXTENSION));
-    }
-
-    /**
-     * Check if the file is a PDF.
-     *
-     * @return bool
-     */
-    public function getIsPdfAttribute()
-    {
-        return $this->file_extension === 'pdf';
     }
 
     /**
@@ -438,25 +336,5 @@ public function incrementUserView($seconds = 3)
         }
 
         return (string) $views;
-    }
-
-    /**
-     * Check if book has been downloaded.
-     *
-     * @return bool
-     */
-    public function getHasDownloadsAttribute()
-    {
-        return ($this->downloads ?? 0) > 0;
-    }
-
-    /**
-     * Check if book has been viewed.
-     *
-     * @return bool
-     */
-    public function getHasViewsAttribute()
-    {
-        return ($this->userview ?? 0) > 0;
     }
 }
