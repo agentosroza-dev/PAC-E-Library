@@ -1,5 +1,5 @@
 const en = {
-    appname: "Agentos SupperApp",
+    appname: "Elibray",
     pageTitle: "Welcome to My Application",
     documentTitle: "My App - Welcome",
     theme: "theme",

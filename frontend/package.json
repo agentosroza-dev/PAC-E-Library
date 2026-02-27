@@ -22,10 +22,11 @@
     "vuex": "^4.1.0"
   },
   "devDependencies": {
-    "@rollup/rollup-win32-x64-msvc": "^4.59.0",
     "@tailwindcss/vite": "^4.2.1",
     "@vitejs/plugin-vue": "^6.0.2",
+    "daisyui": "^5.5.19",
     "nodemon": "^3.1.10",
+    "tailwindcss": "^4.2.1",
     "vite": "^7.3.1",
     "vite-plugin-pwa": "^1.2.0"
   }

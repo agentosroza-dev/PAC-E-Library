@@ -1,5 +1,489 @@
 @import "tailwindcss";
-@plugin "daisyui";
 @plugin "daisyui" {
   themes: all;
-};
+}
+
+/* DaisyUI Light 主题组 */
+[data-theme="light"],
+[data-theme="cupcake"],
+[data-theme="bumblebee"],
+[data-theme="emerald"],
+[data-theme="corporate"],
+[data-theme="retro"],
+[data-theme="cyberpunk"],
+[data-theme="valentine"],
+[data-theme="garden"],
+[data-theme="lofi"],
+[data-theme="pastel"],
+[data-theme="fantasy"],
+[data-theme="wireframe"],
+[data-theme="cmyk"],
+[data-theme="autumn"],
+[data-theme="acid"],
+[data-theme="lemonade"],
+[data-theme="spring"],
+[data-theme="winter"] {
+  --bg-phaka: url(/phakaw.png) !important;
+  --bg-phakachan: url(/phakachanw.png) !important;
+  --bg-phakakbach: url(/phakakbachw.png) !important;
+}
+
+/* DaisyUI Dark 主题组 */
+[data-theme="dark"],
+[data-theme="synthwave"],
+[data-theme="halloween"],
+[data-theme="forest"],
+[data-theme="aqua"],
+[data-theme="black"],
+[data-theme="luxury"],
+[data-theme="dracula"],
+[data-theme="business"],
+[data-theme="night"],
+[data-theme="coffee"] {
+  --bg-phaka: url(/phakab.png) !important;
+  --bg-phakachan: url(/phakachanb.png) !important;
+  --bg-phakakbach: url(/phakakbachb.png) !important;
+}
+
+/* 您的自定义主题 */
+[data-theme="agentos"],
+[data-theme="police"] {
+  --bg-phaka: url(/phakaw.png) !important;
+  --bg-phakachan: url(/phakachanw.png) !important;
+  --bg-phakakbach: url(/phakakbachw.png) !important;
+}
+
+[data-theme="agentosdark"] {
+  --bg-phaka: url(/phakab.png) !important;
+  --bg-phakachan: url(/phakachanb.png) !important;
+  --bg-phakakbach: url(/phakakbachb.png) !important;
+}
+
+@plugin "daisyui/theme" {
+  name: "police";
+  default: false;
+  prefersdark: false;
+  color-scheme: "light";
+  --color-base-100: oklch(100% 0 0);
+  --color-base-200: #f2f2f2;
+  --color-base-300: #e0d7cf;
+  --color-base-content: oklch(22.389% 0.031 278.072);
+  --color-primary: #040dbf;
+  --color-primary-content: oklch(100% 0 0);
+  --color-secondary: #f21d2f;
+  --color-secondary-content: oklch(100% 0 0);
+  --color-accent: #f2be22;
+  --color-accent-content: oklch(100% 0 0);
+  --color-neutral: oklch(27% 0.006 286.033);
+  --color-neutral-content: oklch(100% 0 0);
+  --color-info: oklch(71% 0.143 215.221);
+  --color-info-content: oklch(100% 0 0);
+  --color-success: oklch(69% 0.17 162.48);
+  --color-success-content: oklch(100% 0 0);
+  --color-warning: oklch(70% 0.213 47.604);
+  --color-warning-content: oklch(0% 0 0);
+  --color-error: oklch(63% 0.237 25.331);
+  --color-error-content: oklch(0% 0 0);
+  --radius-selector: 0.5rem;
+  --radius-field: 0.5rem;
+  --radius-box: 1rem;
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
+  --border: 1px;
+  --depth: 0;
+  --noise: 0;
+}
+
+@plugin "daisyui/theme" {
+  name: "agentos";
+  default: true;
+  prefersdark: false;
+  color-scheme: "light";
+  --color-base-100: oklch(96% 0.003 264.542);
+  --color-base-200: oklch(92% 0.006 264.531);
+  --color-base-300: oklch(87% 0.01 258.338);
+  --color-base-content: oklch(13% 0.028 261.692);
+  --color-primary: oklch(70% 0.213 47.604);
+  --color-primary-content: oklch(98% 0.016 73.684);
+  --color-secondary: oklch(54% 0.245 262.881);
+  --color-secondary-content: oklch(97% 0.014 254.604);
+  --color-accent: oklch(85% 0.199 91.936);
+  --color-accent-content: oklch(27% 0.077 45.635);
+  --color-neutral: oklch(37% 0.034 259.733);
+  --color-neutral-content: oklch(98% 0.002 247.839);
+  --color-info: oklch(70% 0.183 293.541);
+  --color-info-content: oklch(25% 0.09 281.288);
+  --color-success: oklch(62% 0.194 149.214);
+  --color-success-content: oklch(98% 0.031 120.757);
+  --color-warning: oklch(66% 0.179 58.318);
+  --color-warning-content: oklch(98% 0.016 73.684);
+  --color-error: oklch(57% 0.245 27.325);
+  --color-error-content: oklch(97% 0.013 17.38);
+  --radius-selector: 0.5rem;
+  --radius-field: 0.5rem;
+  --radius-box: 1rem;
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
+  --border: 1px;
+  --depth: 1;
+  --noise: 0;
+}
+
+@plugin "daisyui/theme" {
+  name: "agentosdark";
+  default: false;
+  prefersdark: true;
+  color-scheme: "dark";
+  --color-base-100: oklch(13% 0.028 261.692);
+  --color-base-200: oklch(21% 0.034 264.665);
+  --color-base-300: oklch(27% 0.033 256.848);
+  --color-base-content: oklch(96% 0.003 264.542);
+  --color-primary: oklch(82% 0.189 84.429);
+  --color-primary-content: oklch(27% 0.077 45.635);
+  --color-secondary: oklch(78% 0.154 211.53);
+  --color-secondary-content: oklch(30% 0.056 229.695);
+  --color-accent: oklch(74% 0.16 232.661);
+  --color-accent-content: oklch(29% 0.066 243.157);
+  --color-neutral: oklch(27% 0.033 256.848);
+  --color-neutral-content: oklch(98% 0.002 247.839);
+  --color-info: oklch(60% 0.126 221.723);
+  --color-info-content: oklch(98% 0.019 200.873);
+  --color-success: oklch(62% 0.194 149.214);
+  --color-success-content: oklch(98% 0.018 155.826);
+  --color-warning: oklch(64% 0.222 41.116);
+  --color-warning-content: oklch(98% 0.016 73.684);
+  --color-error: oklch(58% 0.253 17.585);
+  --color-error-content: oklch(96% 0.015 12.422);
+  --radius-selector: 0.5rem;
+  --radius-field: 0.5rem;
+  --radius-box: 1rem;
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
+  --border: 1px;
+  --depth: 1;
+  --noise: 1;
+}
+
+@theme {
+  --animate-wiggle: wiggle 3s ease-in-out infinite;
+  @keyframes wiggle {
+    0%,
+    100% {
+      transform: rotate(-4deg);
+    }
+    50% {
+      transform: rotate(4deg);
+    }
+  }
+  --animate-wigglereverse: wigglereverse 3s ease-in-out infinite;
+  @keyframes wigglereverse {
+    0%,
+    100% {
+      transform: rotate(2deg);
+    }
+    50% {
+      transform: rotate(-2deg);
+    }
+  }
+  /* Japanese Theme */
+  --animate-sakura-fall: sakura-fall 15s linear infinite;
+  @keyframes sakura-fall {
+    0% {
+      transform: translateY(-100px) rotate(0deg);
+      opacity: 1;
+    }
+    100% {
+      transform: translateY(100vh) rotate(360deg);
+      opacity: 0;
+    }
+  }
+
+  --animate-torii-gate: torii-gate 4s ease-in-out infinite;
+  @keyframes torii-gate {
+    0%,
+    100% {
+      transform: scaleY(1);
+    }
+    50% {
+      transform: scaleY(1.02);
+    }
+  }
+
+  /* African Theme */
+  --animate-african-drum: african-drum 1.5s ease-in-out infinite;
+  @keyframes african-drum {
+    0%,
+    100% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.05);
+    }
+  }
+
+  --animate-kente-weave: kente-weave 8s linear infinite;
+  @keyframes kente-weave {
+    0% {
+      background-position: 0% 0%;
+    }
+    100% {
+      background-position: 100% 100%;
+    }
+  }
+
+  /* Indian Theme */
+  --animate-henna-spin: henna-spin 20s linear infinite;
+  @keyframes henna-spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+  --animate-diwa-flame: diwa-flame 2s ease-in-out infinite alternate;
+  @keyframes diwa-flame {
+    0% {
+      transform: scaleY(1) skewX(-5deg);
+      opacity: 0.8;
+    }
+    100% {
+      transform: scaleY(1.2) skewX(5deg);
+      opacity: 1;
+    }
+  }
+
+  /* Scandinavian Theme */
+  --animate-northern-light: northern-light 20s ease-in-out infinite alternate;
+  @keyframes northern-light {
+    0% {
+      filter: hue-rotate(0deg);
+      opacity: 0.3;
+    }
+    100% {
+      filter: hue-rotate(180deg);
+      opacity: 0.8;
+    }
+  }
+
+  --animate-viking-ship: viking-ship 6s ease-in-out infinite;
+  @keyframes viking-ship {
+    0%,
+    100% {
+      transform: translateY(0) rotate(-1deg);
+    }
+    50% {
+      transform: translateY(-10px) rotate(1deg);
+    }
+  }
+
+  /* Middle Eastern Theme */
+  --animate-mosaic-shimmer: mosaic-shimmer 3s ease-in-out infinite;
+  @keyframes mosaic-shimmer {
+    0%,
+    100% {
+      opacity: 0.9;
+    }
+    50% {
+      opacity: 1;
+    }
+  }
+
+  --animate-desert-wind: desert-wind 10s linear infinite;
+  @keyframes desert-wind {
+    0% {
+      transform: translateX(-100%) skewX(-15deg);
+    }
+    100% {
+      transform: translateX(100%) skewX(-15deg);
+    }
+  }
+
+  /* Latin American Theme */
+  --animate-salsa-dance: salsa-dance 2s ease-in-out infinite;
+  @keyframes salsa-dance {
+    0%,
+    100% {
+      transform: translateX(0) rotate(0deg);
+    }
+    25% {
+      transform: translateX(10px) rotate(5deg);
+    }
+    75% {
+      transform: translateX(-10px) rotate(-5deg);
+    }
+  }
+
+  --animate-maraca-shake: maraca-shake 0.5s ease-in-out infinite;
+  @keyframes maraca-shake {
+    0%,
+    100% {
+      transform: rotate(-10deg);
+    }
+    50% {
+      transform: rotate(10deg);
+    }
+  }
+
+  /* Celtic Theme */
+  --animate-celtic-knot: celtic-knot 40s linear infinite;
+  @keyframes celtic-knot {
+    0% {
+      stroke-dashoffset: 1000;
+    }
+    100% {
+      stroke-dashoffset: 0;
+    }
+  }
+
+  --animate-harp-pluck: harp-pluck 1s ease-out infinite alternate;
+  @keyframes harp-pluck {
+    0% {
+      transform: scaleX(1);
+    }
+    100% {
+      transform: scaleX(1.1);
+    }
+  }
+
+  /* Polynesian Theme */
+  --animate-ocean-wave: ocean-wave 8s ease-in-out infinite;
+  @keyframes ocean-wave {
+    0%,
+    100% {
+      transform: translateY(0) scaleY(1);
+    }
+    50% {
+      transform: translateY(-20px) scaleY(1.05);
+    }
+  }
+
+  --animate-hula-sway: hula-sway 4s ease-in-out infinite;
+  @keyframes hula-sway {
+    0%,
+    100% {
+      transform: rotate(-15deg);
+    }
+    50% {
+      transform: rotate(15deg);
+    }
+  }
+
+  /* Slavic Theme */
+  --animate-matryoshka: matryoshka 5s ease-in-out infinite;
+  @keyframes matryoshka {
+    0%,
+    100% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(0.95);
+    }
+  }
+
+  --animate-firebird: firebird 3s ease-in-out infinite alternate;
+  @keyframes firebird {
+    0% {
+      filter: hue-rotate(0deg) brightness(1);
+    }
+    100% {
+      filter: hue-rotate(30deg) brightness(1.2);
+    }
+  }
+
+  /* Australian Aboriginal Theme */
+  --animate-didgeridoo: didgeridoo 4s ease-in-out infinite;
+  @keyframes didgeridoo {
+    0%,
+    100% {
+      transform: scaleX(1);
+    }
+    50% {
+      transform: scaleX(1.05);
+    }
+  }
+
+  --animate-dreamtime: dreamtime 60s linear infinite;
+  @keyframes dreamtime {
+    0% {
+      background-position: 0% 0%;
+    }
+    100% {
+      background-position: 100% 100%;
+    }
+  }
+
+  /* Mediterranean Theme */
+  --animate-olive-branch: olive-branch 6s ease-in-out infinite;
+  @keyframes olive-branch {
+    0%,
+    100% {
+      transform: rotate(-5deg);
+    }
+    50% {
+      transform: rotate(5deg);
+    }
+  }
+
+  --animate-sunset-med: sunset-med 30s ease-in-out infinite alternate;
+  @keyframes sunset-med {
+    0% {
+      background: linear-gradient(45deg, #ff6b6b, #ffa726);
+    }
+    100% {
+      background: linear-gradient(45deg, #4ecdc4, #45b7d1);
+    }
+  }
+
+  /* Andean Theme */
+  --animate-andes-mountain: andes-mountain 20s ease-in-out infinite alternate;
+  @keyframes andes-mountain {
+    0% {
+      transform: translateY(0);
+      filter: brightness(1);
+    }
+    100% {
+      transform: translateY(-5px);
+      filter: brightness(1.1);
+    }
+  }
+
+  --animate-panpipe: panpipe 2s ease-in-out infinite;
+  @keyframes panpipe {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-5px);
+    }
+  }
+
+  /* Southeast Asian Theme */
+  --animate-lantern-glow: lantern-glow 3s ease-in-out infinite alternate;
+  @keyframes lantern-glow {
+    0% {
+      filter: brightness(1) drop-shadow(0 0 5px #ffcc00);
+    }
+    100% {
+      filter: brightness(1.3) drop-shadow(0 0 15px #ffcc00);
+    }
+  }
+
+  --animate-dragon-dance: dragon-dance 8s ease-in-out infinite;
+  @keyframes dragon-dance {
+    0% {
+      transform: translateX(0);
+    }
+    25% {
+      transform: translateX(20px) rotate(5deg);
+    }
+    75% {
+      transform: translateX(-20px) rotate(-5deg);
+    }
+    100% {
+      transform: translateX(0);
+    }
+  }
+}
