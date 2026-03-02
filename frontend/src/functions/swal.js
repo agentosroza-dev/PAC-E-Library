@@ -114,396 +114,511 @@
 //     });
 // };
 
+import Swal from "sweetalert2";
 
+/**
+ * Get CSS variables from DaisyUI theme (v4+)
+ * @param {string} colorName - The color name from DaisyUI
+ * @returns {string} - The CSS variable string
+ */
+const getDaisyUIColor = (colorName) => {
+    // DaisyUI v4+ CSS variables
+    const colors = {
+        // Primary colors
+        primary: "var(--color-primary)",
+        "primary-content": "var(--color-primary-content)",
 
-// src/functions/swal.js
+        // Secondary colors
+        secondary: "var(--color-secondary)",
+        "secondary-content": "var(--color-secondary-content)",
 
-import Swal from 'sweetalert2';
+        // Accent colors
+        accent: "var(--color-accent)",
+        "accent-content": "var(--color-accent-content)",
 
-// Get CSS variables from DaisyUI theme (v4+)
-const getDaisyUIColor = (colorName, shade = 'default') => {
-  // Correct DaisyUI v4+ CSS variables
-  const colors = {
-    // Primary colors
-    primary: 'var(--color-primary)',
-    'primary-content': 'var(--color-primary-content)',
+        // Neutral colors
+        neutral: "var(--color-neutral)",
+        "neutral-content": "var(--color-neutral-content)",
 
-    // Secondary colors
-    secondary: 'var(--color-secondary)',
-    'secondary-content': 'var(--color-secondary-content)',
+        // Base colors (surface)
+        "base-100": "var(--color-base-100)",
+        "base-200": "var(--color-base-200)",
+        "base-300": "var(--color-base-300)",
+        "base-content": "var(--color-base-content)",
 
-    // Accent colors
-    accent: 'var(--color-accent)',
-    'accent-content': 'var(--color-accent-content)',
+        // Semantic colors
+        info: "var(--color-info)",
+        "info-content": "var(--color-info-content)",
+        success: "var(--color-success)",
+        "success-content": "var(--color-success-content)",
+        warning: "var(--color-warning)",
+        "warning-content": "var(--color-warning-content)",
+        error: "var(--color-error)",
+        "error-content": "var(--color-error-content)",
+    };
 
-    // Neutral colors
-    neutral: 'var(--color-neutral)',
-    'neutral-content': 'var(--color-neutral-content)',
-
-    // Base colors (surface)
-    'base-100': 'var(--color-base-100)',
-    'base-200': 'var(--color-base-200)',
-    'base-300': 'var(--color-base-300)',
-    'base-content': 'var(--color-base-content)',
-
-    // Semantic colors
-    info: 'var(--color-info)',
-    'info-content': 'var(--color-info-content)',
-    success: 'var(--color-success)',
-    'success-content': 'var(--color-success-content)',
-    warning: 'var(--color-warning)',
-    'warning-content': 'var(--color-warning-content)',
-    error: 'var(--color-error)',
-    'error-content': 'var(--color-error-content)',
-  };
-
-  return colors[colorName] || 'var(--color-primary)';
+    return colors[colorName] || "var(--color-primary)";
 };
 
-// Helper to get contrast text color
+/**
+ * Get the actual hex/rgb value from CSS variable
+ * @param {string} cssVar - CSS variable string
+ * @returns {string} - Hex color or falls back to CSS var
+ */
+const getColorValue = (cssVar) => {
+    if (typeof window === "undefined") return cssVar;
+
+    // Try to get computed value
+    const temp = document.createElement("div");
+    temp.style.color = cssVar;
+    document.body.appendChild(temp);
+    const computed = window.getComputedStyle(temp).color;
+    document.body.removeChild(temp);
+
+    // If we got a computed rgb value, use it, otherwise fallback to css var
+    return computed && computed !== "rgba(0, 0, 0, 0)" ? computed : cssVar;
+};
+
+/**
+ * Helper to get contrast text color
+ * @param {string} bgColor - Background color CSS variable
+ * @returns {string} - Contrast text color CSS variable
+ */
 const getContrastColor = (bgColor) => {
-  const contrasts = {
-    'var(--color-primary)': 'var(--color-primary-content)',
-    'var(--color-secondary)': 'var(--color-secondary-content)',
-    'var(--color-accent)': 'var(--color-accent-content)',
-    'var(--color-neutral)': 'var(--color-neutral-content)',
-    'var(--color-info)': 'var(--color-info-content)',
-    'var(--color-success)': 'var(--color-success-content)',
-    'var(--color-warning)': 'var(--color-warning-content)',
-    'var(--color-error)': 'var(--color-error-content)',
-  };
-  return contrasts[bgColor] || 'var(--color-base-content)';
+    const contrasts = {
+        [getDaisyUIColor("primary")]: getDaisyUIColor("primary-content"),
+        [getDaisyUIColor("secondary")]: getDaisyUIColor("secondary-content"),
+        [getDaisyUIColor("accent")]: getDaisyUIColor("accent-content"),
+        [getDaisyUIColor("neutral")]: getDaisyUIColor("neutral-content"),
+        [getDaisyUIColor("info")]: getDaisyUIColor("info-content"),
+        [getDaisyUIColor("success")]: getDaisyUIColor("success-content"),
+        [getDaisyUIColor("warning")]: getDaisyUIColor("warning-content"),
+        [getDaisyUIColor("error")]: getDaisyUIColor("error-content"),
+    };
+    return contrasts[bgColor] || getDaisyUIColor("base-content");
 };
 
 // DaisyUI theme configuration
 const daisyTheme = {
-  confirmButtonColor: getDaisyUIColor('primary'),
-  cancelButtonColor: getDaisyUIColor('error'),
-  background: getDaisyUIColor('base-100'),
-  color: getDaisyUIColor('base-content'),
+    confirmButtonColor: getDaisyUIColor("primary"),
+    cancelButtonColor: getDaisyUIColor("error"),
+    background: getDaisyUIColor("base-100"),
+    color: getDaisyUIColor("base-content"),
 };
 
 // Custom class for DaisyUI styling
 const daisyClasses = {
-  popup: 'rounded-box shadow-2xl border border-base-300',
-  title: 'text-lg font-semibold text-base-content',
-  htmlContainer: 'text-base-content/70',
-  confirmButton: 'btn btn-primary',
-  cancelButton: 'btn btn-ghost',
-  denyButton: 'btn btn-error',
-  closeButton: 'btn btn-sm btn-circle absolute right-2 top-2',
-  loader: 'loading loading-spinner text-primary',
-  actions: 'gap-2',
+    popup: "rounded-box shadow-2xl border border-base-300",
+    title: "text-lg font-semibold text-base-content",
+    htmlContainer: "text-base-content/70",
+    confirmButton: "btn btn-primary",
+    cancelButton: "btn btn-ghost",
+    denyButton: "btn btn-error",
+    closeButton: "btn btn-sm btn-circle btn-ghost absolute right-2 top-2",
+    loader: "loading loading-spinner text-primary",
+    actions: "gap-2 flex justify-end",
+    timerProgressBar: "bg-primary",
 };
 
-// Loading modal
-export const LoadingModal = (title = 'Loading...') => {
-  return Swal.fire({
-    title: title,
-    allowOutsideClick: false,
-    allowEscapeKey: false,
-    showConfirmButton: false,
-    background: getDaisyUIColor('base-100'),
-    color: getDaisyUIColor('base-content'),
-    customClass: {
-      popup: 'rounded-box shadow-2xl',
-      title: 'text-lg font-semibold text-base-content',
-      loader: 'loading loading-spinner text-primary',
-    },
-    willOpen: () => {
-      Swal.showLoading();
-    }
-  });
+/**
+ * Loading modal
+ * @param {string} title - Loading title
+ * @param {string} text - Loading text
+ * @returns {Promise} - Swal instance
+ */
+export const LoadingModal = (title = "Loading...", text = "Please wait...") => {
+    return Swal.fire({
+        title: title,
+        text: text,
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        showConfirmButton: false,
+        background: getColorValue(getDaisyUIColor("base-100")),
+        color: getColorValue(getDaisyUIColor("base-content")),
+        customClass: {
+            popup: daisyClasses.popup,
+            title: daisyClasses.title,
+            htmlContainer: daisyClasses.htmlContainer,
+            loader: daisyClasses.loader,
+        },
+        didOpen: () => {
+            Swal.showLoading();
+        },
+    });
 };
 
-// Close modal
+/**
+ * Close modal
+ */
 export const CloseModal = () => {
-  Swal.close();
+    Swal.close();
 };
 
-// Message modal with proper icon colors
+/**
+ * Message modal with proper icon colors
+ * @param {string} icon - Icon type (success, error, warning, info, question)
+ * @param {string} title - Modal title
+ * @param {string} message - Modal message
+ * @returns {Promise} - Swal instance
+ */
 export const MessageModal = (icon, title, message) => {
-  const iconColorMap = {
-    success: getDaisyUIColor('success'),
-    error: getDaisyUIColor('error'),
-    warning: getDaisyUIColor('warning'),
-    info: getDaisyUIColor('info'),
-    question: getDaisyUIColor('primary'),
-  };
+    const iconColorMap = {
+        success: getColorValue(getDaisyUIColor("success")),
+        error: getColorValue(getDaisyUIColor("error")),
+        warning: getColorValue(getDaisyUIColor("warning")),
+        info: getColorValue(getDaisyUIColor("info")),
+        question: getColorValue(getDaisyUIColor("primary")),
+    };
 
-  return Swal.fire({
-    icon: icon,
-    title: title,
-    text: message,
-    background: getDaisyUIColor('base-100'),
-    color: getDaisyUIColor('base-content'),
-    iconColor: iconColorMap[icon] || getDaisyUIColor('primary'),
-    confirmButtonColor: getDaisyUIColor('primary'),
-    customClass: {
-      popup: 'rounded-box shadow-2xl border border-base-300',
-      title: 'text-lg font-semibold text-base-content',
-      htmlContainer: 'text-base-content/70',
-      confirmButton: 'btn btn-primary',
-    }
-  });
+    return Swal.fire({
+        icon: icon,
+        title: title,
+        text: message,
+        background: getColorValue(getDaisyUIColor("base-100")),
+        color: getColorValue(getDaisyUIColor("base-content")),
+        iconColor:
+            iconColorMap[icon] || getColorValue(getDaisyUIColor("primary")),
+        confirmButtonColor: getColorValue(getDaisyUIColor("primary")),
+        customClass: {
+            popup: daisyClasses.popup,
+            title: daisyClasses.title,
+            htmlContainer: daisyClasses.htmlContainer,
+            confirmButton: daisyClasses.confirmButton,
+        },
+    });
 };
 
-// Confirm modal
-export const ConfirmModal = (title, text, icon = 'question') => {
-  return Swal.fire({
-    title: title,
-    text: text,
-    icon: icon,
-    showCancelButton: true,
-    confirmButtonColor: getDaisyUIColor('primary'),
-    cancelButtonColor: getDaisyUIColor('error'),
-    confirmButtonText: 'Yes',
-    cancelButtonText: 'Cancel',
-    background: getDaisyUIColor('base-100'),
-    color: getDaisyUIColor('base-content'),
-    iconColor: getDaisyUIColor('primary'),
-    reverseButtons: true,
-    customClass: {
-      popup: 'rounded-box shadow-2xl border border-base-300',
-      title: 'text-lg font-semibold text-base-content',
-      htmlContainer: 'text-base-content/70',
-      confirmButton: 'btn btn-primary',
-      cancelButton: 'btn btn-ghost',
-      actions: 'gap-2',
-    }
-  });
+/**
+ * Confirm modal
+ * @param {string} title - Modal title
+ * @param {string} text - Modal text
+ * @param {string} icon - Icon type (default: 'question')
+ * @returns {Promise} - Swal instance
+ */
+export const ConfirmModal = (title, text, icon = "question") => {
+    return Swal.fire({
+        title: title,
+        text: text,
+        icon: icon,
+        showCancelButton: true,
+        confirmButtonColor: getColorValue(getDaisyUIColor("primary")),
+        cancelButtonColor: getColorValue(getDaisyUIColor("error")),
+        confirmButtonText: "Yes",
+        cancelButtonText: "Cancel",
+        background: getColorValue(getDaisyUIColor("base-100")),
+        color: getColorValue(getDaisyUIColor("base-content")),
+        iconColor: getColorValue(getDaisyUIColor("primary")),
+        reverseButtons: true,
+        customClass: {
+            popup: daisyClasses.popup,
+            title: daisyClasses.title,
+            htmlContainer: daisyClasses.htmlContainer,
+            cancelButton: daisyClasses.cancelButton,
+            confirmButton: daisyClasses.confirmButton,
+            actions: daisyClasses.actions,
+        },
+    });
 };
 
-// Success modal
-export const SuccessModal = (message) => {
-  return Swal.fire({
-    icon: 'success',
-    title: 'Success',
-    text: message,
-    timer: 3000,
-    showConfirmButton: false,
-    background: getDaisyUIColor('base-100'),
-    color: getDaisyUIColor('base-content'),
-    iconColor: getDaisyUIColor('success'),
-    timerProgressBar: true,
-    customClass: {
-      popup: 'rounded-box shadow-2xl border border-base-300',
-      title: 'text-lg font-semibold text-base-content',
-      htmlContainer: 'text-base-content/70',
-      timerProgressBar: 'bg-success',
-    }
-  });
+/**
+ * Success modal
+ * @param {string} message - Success message
+ * @param {number} timer - Auto close timer in ms
+ * @returns {Promise} - Swal instance
+ */
+export const SuccessModal = (message, timer = 3000) => {
+    return Swal.fire({
+        icon: "success",
+        title: "Success",
+        text: message,
+        timer: timer,
+        showConfirmButton: false,
+        background: getColorValue(getDaisyUIColor("base-100")),
+        color: getColorValue(getDaisyUIColor("base-content")),
+        iconColor: getColorValue(getDaisyUIColor("success")),
+        timerProgressBar: true,
+        customClass: {
+            popup: daisyClasses.popup,
+            title: daisyClasses.title,
+            htmlContainer: daisyClasses.htmlContainer,
+            timerProgressBar: "bg-success",
+        },
+    });
 };
 
-// Error modal
+/**
+ * Error modal
+ * @param {string} message - Error message
+ * @returns {Promise} - Swal instance
+ */
 export const ErrorModal = (message) => {
-  return Swal.fire({
-    icon: 'error',
-    title: 'Error',
-    text: message,
-    confirmButtonColor: getDaisyUIColor('error'),
-    background: getDaisyUIColor('base-100'),
-    color: getDaisyUIColor('base-content'),
-    iconColor: getDaisyUIColor('error'),
-    customClass: {
-      popup: 'rounded-box shadow-2xl border border-base-300',
-      title: 'text-lg font-semibold text-base-content',
-      htmlContainer: 'text-base-content/70',
-      confirmButton: 'btn btn-error',
-    }
-  });
+    return Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: message,
+        confirmButtonColor: getColorValue(getDaisyUIColor("error")),
+        background: getColorValue(getDaisyUIColor("base-100")),
+        color: getColorValue(getDaisyUIColor("base-content")),
+        iconColor: getColorValue(getDaisyUIColor("error")),
+        customClass: {
+            popup: daisyClasses.popup,
+            title: daisyClasses.title,
+            htmlContainer: daisyClasses.htmlContainer,
+            confirmButton: "btn btn-error",
+        },
+    });
 };
 
-// Warning modal
+/**
+ * Warning modal
+ * @param {string} message - Warning message
+ * @returns {Promise} - Swal instance
+ */
 export const WarningModal = (message) => {
-  return Swal.fire({
-    icon: 'warning',
-    title: 'Warning',
-    text: message,
-    confirmButtonColor: getDaisyUIColor('warning'),
-    background: getDaisyUIColor('base-100'),
-    color: getDaisyUIColor('base-content'),
-    iconColor: getDaisyUIColor('warning'),
-    customClass: {
-      popup: 'rounded-box shadow-2xl border border-base-300',
-      title: 'text-lg font-semibold text-base-content',
-      htmlContainer: 'text-base-content/70',
-      confirmButton: 'btn btn-warning',
-    }
-  });
+    return Swal.fire({
+        icon: "warning",
+        title: "Warning",
+        text: message,
+        confirmButtonColor: getColorValue(getDaisyUIColor("warning")),
+        background: getColorValue(getDaisyUIColor("base-100")),
+        color: getColorValue(getDaisyUIColor("base-content")),
+        iconColor: getColorValue(getDaisyUIColor("warning")),
+        customClass: {
+            popup: daisyClasses.popup,
+            title: daisyClasses.title,
+            htmlContainer: daisyClasses.htmlContainer,
+            confirmButton: "btn btn-warning",
+        },
+    });
 };
 
-// Info modal
+/**
+ * Info modal
+ * @param {string} message - Info message
+ * @returns {Promise} - Swal instance
+ */
 export const InfoModal = (message) => {
-  return Swal.fire({
-    icon: 'info',
-    title: 'Information',
-    text: message,
-    confirmButtonColor: getDaisyUIColor('info'),
-    background: getDaisyUIColor('base-100'),
-    color: getDaisyUIColor('base-content'),
-    iconColor: getDaisyUIColor('info'),
-    customClass: {
-      popup: 'rounded-box shadow-2xl border border-base-300',
-      title: 'text-lg font-semibold text-base-content',
-      htmlContainer: 'text-base-content/70',
-      confirmButton: 'btn btn-info',
-    }
-  });
+    return Swal.fire({
+        icon: "info",
+        title: "Information",
+        text: message,
+        confirmButtonColor: getColorValue(getDaisyUIColor("info")),
+        background: getColorValue(getDaisyUIColor("base-100")),
+        color: getColorValue(getDaisyUIColor("base-content")),
+        iconColor: getColorValue(getDaisyUIColor("info")),
+        customClass: {
+            popup: daisyClasses.popup,
+            title: daisyClasses.title,
+            htmlContainer: daisyClasses.htmlContainer,
+            confirmButton: "btn btn-info",
+        },
+    });
 };
 
-// Delete confirmation modal
-export const DeleteConfirmModal = (itemName = 'item') => {
-  return Swal.fire({
-    title: 'Are you sure?',
-    text: `You won't be able to revert this ${itemName}!`,
-    icon: 'warning',
-    showCancelButton: true,
-    confirmButtonColor: getDaisyUIColor('error'),
-    cancelButtonColor: getDaisyUIColor('primary'),
-    confirmButtonText: 'Yes, delete it!',
-    cancelButtonText: 'Cancel',
-    background: getDaisyUIColor('base-100'),
-    color: getDaisyUIColor('base-content'),
-    iconColor: getDaisyUIColor('warning'),
-    reverseButtons: true,
-    customClass: {
-      popup: 'rounded-box shadow-2xl border border-base-300',
-      title: 'text-lg font-semibold text-base-content',
-      htmlContainer: 'text-base-content/70',
-      confirmButton: 'btn btn-error',
-      cancelButton: 'btn btn-primary',
-      actions: 'gap-2',
-    }
-  });
+/**
+ * Delete confirmation modal
+ * @param {string} itemName - Name of item to delete
+ * @returns {Promise} - Swal instance
+ */
+export const DeleteConfirmModal = (itemName = "item") => {
+    return Swal.fire({
+        title: "Are you sure?",
+        text: `You won't be able to revert this ${itemName}!`,
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: getColorValue(getDaisyUIColor("error")),
+        cancelButtonColor: getColorValue(getDaisyUIColor("primary")),
+        confirmButtonText: "Yes, delete it!",
+        cancelButtonText: "Cancel",
+        background: getColorValue(getDaisyUIColor("base-100")),
+        color: getColorValue(getDaisyUIColor("base-content")),
+        iconColor: getColorValue(getDaisyUIColor("warning")),
+        reverseButtons: true,
+        customClass: {
+            popup: daisyClasses.popup,
+            title: daisyClasses.title,
+            htmlContainer: daisyClasses.htmlContainer,
+            confirmButton: "btn btn-error",
+            cancelButton: daisyClasses.confirmButton,
+            actions: daisyClasses.actions,
+        },
+    });
 };
 
-// Form validation modal
+/**
+ * Form validation modal
+ * @param {Object|Array} errors - Validation errors
+ * @returns {Promise} - Swal instance
+ */
 export const ValidationErrorModal = (errors) => {
-  let errorList = '<ul class="list-disc list-inside space-y-1 text-left mt-2">';
-  Object.values(errors).forEach(error => {
-    if (Array.isArray(error)) {
-      error.forEach(msg => {
-        errorList += `<li class="text-error-content bg-error/10 p-1 rounded">${msg}</li>`;
-      });
-    } else {
-      errorList += `<li class="text-error-content bg-error/10 p-1 rounded">${error}</li>`;
-    }
-  });
-  errorList += '</ul>';
+    let errorList =
+        '<ul class="list-disc list-inside space-y-1 text-left mt-2">';
 
-  return Swal.fire({
-    icon: 'error',
-    title: 'Validation Error',
-    html: `
+    const processErrors = (err) => {
+        if (typeof err === "string") {
+            errorList += `<li class="text-error-content bg-error/10 p-1 rounded">${err}</li>`;
+        } else if (Array.isArray(err)) {
+            err.forEach((msg) => {
+                errorList += `<li class="text-error-content bg-error/10 p-1 rounded">${msg}</li>`;
+            });
+        } else if (typeof err === "object") {
+            Object.values(err).forEach((val) => processErrors(val));
+        }
+    };
+
+    processErrors(errors);
+    errorList += "</ul>";
+
+    return Swal.fire({
+        icon: "error",
+        title: "Validation Error",
+        html: `
       <div class="text-base-content/70 mb-2">
         Please fix the following errors:
       </div>
       ${errorList}
     `,
-    confirmButtonColor: getDaisyUIColor('primary'),
-    background: getDaisyUIColor('base-100'),
-    color: getDaisyUIColor('base-content'),
-    iconColor: getDaisyUIColor('error'),
-    customClass: {
-      popup: 'rounded-box shadow-2xl border border-base-300 max-w-md',
-      title: 'text-lg font-semibold text-base-content',
-      htmlContainer: 'text-base-content/70',
-      confirmButton: 'btn btn-primary',
-    }
-  });
+        confirmButtonColor: getColorValue(getDaisyUIColor("primary")),
+        background: getColorValue(getDaisyUIColor("base-100")),
+        color: getColorValue(getDaisyUIColor("base-content")),
+        iconColor: getColorValue(getDaisyUIColor("error")),
+        customClass: {
+            popup: `${daisyClasses.popup} max-w-md`,
+            title: daisyClasses.title,
+            htmlContainer: daisyClasses.htmlContainer,
+            confirmButton: daisyClasses.confirmButton,
+        },
+    });
 };
 
-// Toast notification
-export const Toast = (icon, message, position = 'top-end') => {
-  const iconColorMap = {
-    success: getDaisyUIColor('success'),
-    error: getDaisyUIColor('error'),
-    warning: getDaisyUIColor('warning'),
-    info: getDaisyUIColor('info'),
-  };
+/**
+ * Toast notification
+ * @param {string} icon - Icon type (success, error, warning, info)
+ * @param {string} message - Toast message
+ * @param {string} position - Toast position
+ * @returns {Promise} - Swal instance
+ * // Success Toast
+// Success with emoji
+Toast("success", "🎉 Operation completed successfully!");
 
-  const Toast = Swal.mixin({
-    toast: true,
-    position: position,
-    showConfirmButton: false,
-    timer: 3000,
-    timerProgressBar: true,
-    background: getDaisyUIColor('base-100'),
-    color: getDaisyUIColor('base-content'),
-    iconColor: iconColorMap[icon] || getDaisyUIColor('primary'),
-    customClass: {
-      popup: 'rounded-box shadow-xl border border-base-300',
-      timerProgressBar: `bg-${icon}`,
-    }
-  });
+// Error with context
+Toast("error", "⚠️ Network connection lost");
 
-  return Toast.fire({
-    icon: icon,
-    title: message
-  });
+// Warning with action
+Toast("warning", "⏰ Session expires in 5 minutes");
+
+// Info with update
+Toast("info", "✨ New features available!");
+ */
+export const Toast = (icon, message, position = "top-end") => {
+    const iconColorMap = {
+        success: getColorValue(getDaisyUIColor("success")),
+        error: getColorValue(getDaisyUIColor("error")),
+        warning: getColorValue(getDaisyUIColor("warning")),
+        info: getColorValue(getDaisyUIColor("info")),
+    };
+
+    const Toast = Swal.mixin({
+        toast: true,
+        position: position,
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        background: getColorValue(getDaisyUIColor("base-100")),
+        color: getColorValue(getDaisyUIColor("base-content")),
+        iconColor:
+            iconColorMap[icon] || getColorValue(getDaisyUIColor("primary")),
+        customClass: {
+            popup: "rounded-box shadow-xl border border-base-300",
+            timerProgressBar: `bg-${icon}`,
+        },
+    });
+
+    return Toast.fire({
+        icon: icon,
+        title: message,
+    });
 };
 
-// Progress modal
-export const ProgressModal = (title = 'Processing...') => {
-  return Swal.fire({
-    title: title,
-    html: '<div class="progress-bar"></div>',
-    allowOutsideClick: false,
-    showConfirmButton: false,
-    background: getDaisyUIColor('base-100'),
-    color: getDaisyUIColor('base-content'),
-    didOpen: () => {
-      Swal.showLoading();
-    },
-    customClass: {
-      popup: 'rounded-box shadow-2xl border border-base-300',
-      title: 'text-lg font-semibold text-base-content',
-      loader: 'loading loading-spinner text-primary',
-    }
-  });
+/**
+ * Progress modal
+ * @param {string} title - Modal title
+ * @param {string} text - Modal text
+ * @returns {Promise} - Swal instance
+ */
+export const ProgressModal = (
+    title = "Processing...",
+    text = "Please wait...",
+) => {
+    return Swal.fire({
+        title: title,
+        text: text,
+        allowOutsideClick: false,
+        showConfirmButton: false,
+        background: getColorValue(getDaisyUIColor("base-100")),
+        color: getColorValue(getDaisyUIColor("base-content")),
+        didOpen: () => {
+            Swal.showLoading();
+        },
+        customClass: {
+            popup: daisyClasses.popup,
+            title: daisyClasses.title,
+            htmlContainer: daisyClasses.htmlContainer,
+            loader: daisyClasses.loader,
+        },
+    });
 };
 
-// Custom modal with HTML content
-export const CustomModal = (title, html, icon = 'info') => {
-  const iconColorMap = {
-    success: getDaisyUIColor('success'),
-    error: getDaisyUIColor('error'),
-    warning: getDaisyUIColor('warning'),
-    info: getDaisyUIColor('info'),
-    question: getDaisyUIColor('primary'),
-  };
+/**
+ * Custom modal with HTML content
+ * @param {string} title - Modal title
+ * @param {string} html - HTML content
+ * @param {string} icon - Icon type
+ * @returns {Promise} - Swal instance
+ */
+export const CustomModal = (title, html, icon = "info") => {
+    const iconColorMap = {
+        success: getColorValue(getDaisyUIColor("success")),
+        error: getColorValue(getDaisyUIColor("error")),
+        warning: getColorValue(getDaisyUIColor("warning")),
+        info: getColorValue(getDaisyUIColor("info")),
+        question: getColorValue(getDaisyUIColor("primary")),
+    };
 
-  return Swal.fire({
-    title: title,
-    html: html,
-    icon: icon,
-    background: getDaisyUIColor('base-100'),
-    color: getDaisyUIColor('base-content'),
-    iconColor: iconColorMap[icon] || getDaisyUIColor('primary'),
-    confirmButtonColor: getDaisyUIColor('primary'),
-    customClass: {
-      popup: 'rounded-box shadow-2xl border border-base-300',
-      title: 'text-lg font-semibold text-base-content',
-      htmlContainer: 'text-base-content/70',
-      confirmButton: 'btn btn-primary',
-    }
-  });
+    return Swal.fire({
+        title: title,
+        html: html,
+        icon: icon,
+        background: getColorValue(getDaisyUIColor("base-100")),
+        color: getColorValue(getDaisyUIColor("base-content")),
+        iconColor:
+            iconColorMap[icon] || getColorValue(getDaisyUIColor("primary")),
+        confirmButtonColor: getColorValue(getDaisyUIColor("primary")),
+        customClass: {
+            popup: daisyClasses.popup,
+            title: daisyClasses.title,
+            htmlContainer: daisyClasses.htmlContainer,
+            confirmButton: daisyClasses.confirmButton,
+        },
+    });
 };
 
 // Export all functions
 export default {
-  LoadingModal,
-  CloseModal,
-  MessageModal,
-  ConfirmModal,
-  SuccessModal,
-  ErrorModal,
-  WarningModal,
-  InfoModal,
-  DeleteConfirmModal,
-  ValidationErrorModal,
-  Toast,
-  ProgressModal,
-  CustomModal,
+    LoadingModal,
+    CloseModal,
+    MessageModal,
+    ConfirmModal,
+    SuccessModal,
+    ErrorModal,
+    WarningModal,
+    InfoModal,
+    DeleteConfirmModal,
+    ValidationErrorModal,
+    Toast,
+    ProgressModal,
+    CustomModal,
+    // Utility functions
+    getDaisyUIColor,
+    getColorValue,
 };

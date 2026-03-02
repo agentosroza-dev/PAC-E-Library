@@ -10,7 +10,11 @@ class PdfCategory extends Model
     /** @use HasFactory<\Database\Factories\CategoryFactory> */
     use HasFactory;
 
-    protected $fillable = ['title','description'];
+    protected $fillable = ['title', 'description', 'status'];
+
+    protected $casts = [
+        'status' => 'boolean',
+    ];
 
     // Optional: Consider using plural for relationship methods that return multiple items
     public function pdfBooks() // Changed from pdfbook to pdfBooks (plural convention)

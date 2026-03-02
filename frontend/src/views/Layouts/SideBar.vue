@@ -1,15 +1,52 @@
 <template>
     <!-- Sidebar content here -->
     <div
-        class="flex flex-col h-dvh w-full rounded-xl justify-content-between items-left"
+        class="flex flex-col h-dvh w-full rounded-xl justify-content-between items-left border-r border-base-300"
     >
+        <div class="p-4 border-b border-base-300">
+            <div class="flex items-center gap-3 is-drawer-close:justify-center">
+                <div class="relative group">
+                    <!-- Animated Logo -->
+                    <div
+                        class="w-10 h-10 bg-linear-to-br from-primary to-secondary rounded-xl shadow-lg flex items-center justify-center transform transition-all duration-300 group-hover:scale-110 group-hover:rotate-3"
+                    >
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 24 24"
+                            stroke-linejoin="round"
+                            stroke-linecap="round"
+                            stroke-width="1.5"
+                            fill="none"
+                            stroke="white"
+                            class="w-5 h-5"
+                        >
+                            <path
+                                d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"
+                            ></path>
+                            <path
+                                d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"
+                            ></path>
+                        </svg>
+                    </div>
+                    <!-- Glow Effect -->
+                    <div
+                        class="absolute -inset-1 bg-linear-to-r from-primary/20 to-secondary/20 rounded-xl blur opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                    ></div>
+                </div>
+                <span
+                    class="font-bold text-lg is-drawer-close:hidden bg-linear-to-r from-primary to-secondary bg-clip-text text-transparent"
+                >
+                    AppName
+                </span>
+            </div>
+        </div>
         <ul class="menu grow gap-2 p-2 w-full">
             <!-- Homepage item with router-link -->
             <li class="w-full">
                 <router-link
-                    to="/"
+                    to="/home"
                     class="is-drawer-close:tooltip is-drawer-close:tooltip-right"
-                    data-tip="Homepage"
+                    data-tip="Home"
                     :class="{ 'menu-active': $route.path === '/home' }"
                 >
                     <!-- Home icon -->
@@ -31,6 +68,99 @@
                         ></path>
                     </svg>
                     <span class="is-drawer-close:hidden">Homepage</span>
+                </router-link>
+            </li>
+            <li class="w-full">
+                <router-link
+                    to="/pdfbook"
+                    class="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                    data-tip="Pdfbook"
+                    :class="{ 'menu-active': $route.path === '/pdfbook' }"
+                >
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="20"
+                        height="20"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class="icon icon-tabler icons-tabler-outline icon-tabler-file-type-pdf"
+                    >
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                        <path d="M14 3v4a1 1 0 0 0 1 1h4" />
+                        <path d="M5 12v-7a2 2 0 0 1 2 -2h7l5 5v4" />
+                        <path d="M5 18h1.5a1.5 1.5 0 0 0 0 -3h-1.5v6" />
+                        <path d="M17 18h2" />
+                        <path d="M20 15h-3v6" />
+                        <path
+                            d="M11 15v6h1a2 2 0 0 0 2 -2v-2a2 2 0 0 0 -2 -2h-1"
+                        />
+                    </svg>
+                    <span class="is-drawer-close:hidden">EBook</span>
+                </router-link>
+            </li>
+            <li class="w-full">
+                <router-link
+                    to="/favorites"
+                    class="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                    data-tip="favorites"
+                    :class="{ 'menu-active': $route.path === '/favorites' }"
+                >
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="18"
+                        height="18"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class="icon icon-tabler icons-tabler-outline icon-tabler-table-heart"
+                    >
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                        <path
+                            d="M11.5 21h-6.5a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v6"
+                        />
+                        <path d="M3 10h18" />
+                        <path d="M10 3v18" />
+                        <path
+                            d="M18 22l3.35 -3.284a2.143 2.143 0 0 0 .005 -3.071a2.242 2.242 0 0 0 -3.129 -.006l-.224 .22l-.223 -.22a2.242 2.242 0 0 0 -3.128 -.006a2.143 2.143 0 0 0 -.006 3.071l3.355 3.296"
+                        />
+                    </svg>
+                    <span class="is-drawer-close:hidden">Your Fevorites</span>
+                </router-link>
+            </li>
+            <!-- Dashboard item with router-link -->
+            <li class="w-full" v-show="userLevel === 'admin'">
+                <router-link
+                    to="/dashboard"
+                    class="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                    data-tip="Dashboard"
+                    :class="{ 'menu-active': $route.path === '/dashboard' }"
+                >
+                    <!-- Home icon -->
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="18"
+                        height="18"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class="icon icon-tabler icons-tabler-outline icon-tabler-dashboard"
+                    >
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                        <path d="M10 13a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+                        <path d="M13.45 11.55l2.05 -2.05" />
+                        <path d="M6.4 20a9 9 0 1 1 11.2 0l-11.2 0" />
+                    </svg>
+                    <span class="is-drawer-close:hidden">Dashboard</span>
                 </router-link>
             </li>
 
@@ -167,9 +297,15 @@
 import LanguageChanger from "@/components/LanguageChanger.vue";
 import ThemeChanger from "@/components/ThemeChanger.vue";
 import { useRoute } from "vue-router";
-
+import { computed } from "vue";
+import { useStore } from "vuex";
 // Optional: Get current route for more complex conditions
 const route = useRoute();
+const store = useStore();
+
+// Computed properties for user data
+
+const userLevel = computed(() => store.state.user?.level || null);
 
 // You can also create computed properties for active states
 // if you need more complex matching logic

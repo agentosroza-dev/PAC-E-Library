@@ -127,16 +127,15 @@
 
 <template>
     <div class="flex justify-center items-center">
-        <p class="text-warning">Logout Progress ...!</p>
+        <p class="login-box-msg">Processing Logout authentication...!</p>
     </div>
 </template>
-
 
 <script setup>
 import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { postSignOut } from "@/functions/api/auth";
-import { MessageModal } from "@/functions/swal";
+import { ConfirmModal ,SuccessModal} from "@/functions/swal";
 
 const router = useRouter();
 const loading = ref(true);
@@ -144,93 +143,87 @@ const processing = ref(false);
 
 // Function to go back to previous route
 function goBack() {
-  if (window.history.length > 1) {
-    router.back();
-  } else {
-    router.replace({ name: "home" });
-  }
+    if (window.history.length > 1) {
+        router.back();
+    } else {
+        router.replace({ name: "home" });
+    }
 }
 
 // Cancel sign out and go back
 function cancelSignOut() {
-  goBack();
+    goBack();
 }
 
 // Confirm sign out
 async function confirmSignOut() {
-  processing.value = true;
+    processing.value = true;
 
-  try {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      router.replace({ name: "auth.signin" });
-      return;
+    try {
+        const token = localStorage.getItem("token");
+        if (!token) {
+            router.replace({ name: "auth.signin" });
+            return;
+        }
+
+        await postSignOut(token);
+        localStorage.removeItem("token");
+
+        // Show success message
+        await SuccessModal(
+           "Signed Out!",
+            "You have been successfully signed out.",
+            "success",
+             2000,
+             true,
+        );
+
+        router.replace({ name: "auth.signin" });
+    } catch (error) {
+        processing.value = false;
+
+        if (!error.response) {
+            return MessageModal("error", "Error", error.message);
+        }
+        return MessageModal("error", "Error", error.response.data.message);
     }
-
-    await postSignOut(token);
-    localStorage.removeItem("token");
-
-    // Show success message
-    await window.Swal.fire({
-      title: "Signed Out!",
-      text: "You have been successfully signed out.",
-      icon: "success",
-      confirmButtonColor: "#3b82f6",
-      timer: 2000,
-      timerProgressBar: true,
-    });
-
-    router.replace({ name: "auth.signin" });
-  } catch (error) {
-    processing.value = false;
-
-    if (!error.response) {
-      return MessageModal("error", "Error", error.message);
-    }
-    return MessageModal("error", "Error", error.response.data.message);
-  }
 }
 
 // Initialize on mount
 onMounted(async () => {
-  const result = await window.Swal.fire({
-    title: "Are you sure?",
-    text: "You won't be able to logout this!",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#3b82f6",
-    cancelButtonColor: "#6b7280",
-    confirmButtonText: "Yes, logout it!",
-    cancelButtonText: "Cancel",
-  });
+    const result = await ConfirmModal(
+  "Are you sure?",
+  "This action cannot be undone",
+  "warning"
+);
 
-  if (result.isConfirmed) {
-    await confirmSignOut();
-  } else {
-    loading.value = false;
-    goBack();
-  }
+    if (result.isConfirmed) {
+        await confirmSignOut();
+    } else {
+        loading.value = false;
+        goBack();
+    }
 });
 </script>
 
 <style scoped>
 /* Smooth transitions */
 .card {
-  animation: fadeIn 0.3s ease-out;
+    animation: fadeIn 0.3s ease-out;
 }
 
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .btn {
-  transition: all 0.2s ease;
+    transition: all 0.2s ease;
 }
 </style>

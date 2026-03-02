@@ -28,7 +28,7 @@ return new class extends Migration
             $table->timestamps();
 
             // Track unique reading sessions per user per book
-            $table->unique(['user_id', 'pdf_book_id'], 'pdf_reading_histories_user_book_unique'); // FIXED: unique name
+            $table->unique(['user_id', 'pdf_book_id'], 'pdf_reading_histories_user_book_unique');
 
             // Indexes for analytics
             $table->index('last_read_at');

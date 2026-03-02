@@ -1,9 +1,8 @@
 import { createRouter, createWebHistory } from "vue-router";
-import HomeView from "../views/HomeView.vue";
 import AboutView from "@/views/AboutView.vue";
-import Navbar from "@/Layouts/Navbar.vue";
-import SideBar from "@/Layouts/SideBar.vue";
-import Footer from "@/Layouts/Footer.vue";
+import Navbar from "@/views/Layouts/Navbar.vue";
+import SideBar from "@/views/Layouts/SideBar.vue";
+import Footer from "@/views/Layouts/Footer.vue";
 import SignIn from "@/views/auth/SignIn.vue";
 import SignOut from "@/views/auth/SignOut.vue";
 import SignUp from "@/views/auth/SignUp.vue";
@@ -13,6 +12,10 @@ import SetNewPassword from "@/views/auth/SetNewPassword.vue";
 import GoogleCallback from "@/views/auth/GoogleCallback.vue";
 import GoogleCallbackError from "@/views/auth/GoogleCallbackError.vue";
 import UserProfile from "@/views/auth/UserProfile.vue";
+import IndexPdf from "@/views/pdfs/IndexPdf.vue";
+import Dashboard from "../views/Dashboard.vue";
+import HomeView from "@/views/HomeView.vue";
+import FevoritePdf from "@/views/pdfs/FevoritePdf.vue";
 
 function authorize(roles) {
     return (to, from, next) => {
@@ -35,14 +38,41 @@ const includes = {
 
 const routes = [
     {
-        path: "/home",
+        path: "/",
         name: "home",
         components: {
             default: HomeView,
             ...includes,
         },
         meta: { guard: true },
-         beforeEnter: authorize(['admin']),
+    },
+    {
+        path: "/pdfbook",
+        name: "pdfbook",
+        components: {
+            default: IndexPdf,
+            ...includes,
+        },
+        meta: { guard: true },
+    },
+    {
+        path: "/favorites",
+        name: "favorites",
+        components: {
+            default: FevoritePdf,
+            ...includes,
+        },
+        meta: { guard: true },
+    },
+    {
+        path: "/dashboard",
+        name: "dashboard",
+        components: {
+            default: Dashboard,
+            ...includes,
+        },
+        meta: { guard: true },
+        beforeEnter: authorize(["admin"]),
     },
     {
         path: "/about",
@@ -54,14 +84,23 @@ const routes = [
         meta: { guard: true },
         //   beforeEnter: authorize(['admin']),
     },
- {
-      path: '/profile',
-      name: 'profile',
-      components: {
-        default: UserProfile,
-        ...includes,
-      },
-      meta: { guard: true },
+    {
+        path: "/profile",
+        name: "profile",
+        components: {
+            default: UserProfile,
+            ...includes,
+        },
+        meta: { guard: true },
+    },
+    {
+        path: "/pdfbook",
+        name: "pdfbook",
+        components: {
+            default: IndexPdf,
+            ...includes,
+        },
+        meta: { guard: true },
     },
     {
         path: "/",

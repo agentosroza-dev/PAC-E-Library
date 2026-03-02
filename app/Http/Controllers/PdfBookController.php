@@ -11,7 +11,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
 
-
 class PdfBookController extends Controller
 {
     /**
@@ -30,6 +29,7 @@ class PdfBookController extends Controller
             // Create query for PDF books with category
             $query = PdfBook::with('category');
             $user = Auth::user();
+
             // Search
             if ($request->filled('search')) {
                 $query->search($request->search);
@@ -42,7 +42,13 @@ class PdfBookController extends Controller
 
             // Filter by status
             if ($request->filled('status')) {
-                $query->byStatus($request->status);
+                // Convert string 'active'/'inactive' or '1'/'0' to boolean
+                $status = $request->status;
+                if ($status === 'active' || $status === '1') {
+                    $query->byStatus(true);
+                } elseif ($status === 'inactive' || $status === '0') {
+                    $query->byStatus(false);
+                }
             }
 
             // Set default sort values
@@ -76,7 +82,13 @@ class PdfBookController extends Controller
             return view('pdf-books.index', [
                 'pdfBooks' => collect([]),
                 'categories' => PdfCategory::orderBy('title')->get(),
-                'statistics' => PdfBook::getStatistics(),
+                'statistics' => [
+                    'total_books' => 0,
+                    'active_books' => 0,
+                    'total_downloads' => 0,
+                    'total_views' => 0,
+                    'total_categories' => PdfCategory::count(),
+                ],
                 'sortBy' => 'created_at',
                 'sortOrder' => 'desc',
                 'error' => 'Failed to load PDF books. Please try again.'
@@ -117,9 +129,10 @@ class PdfBookController extends Controller
     {
         $categories = PdfCategory::orderBy('title')->get();
 
-        // if ($categories->isEmpty()) {
-        //     return redirect()->route('pdf-categories.create')->with('warning', 'Please create a category first before adding books.');
-        // }
+        if ($categories->isEmpty()) {
+            return view('pdf-books.create', compact('categories'))
+                ->with('warning', 'Please create a category first before adding books.');
+        }
 
         return view('pdf-books.create', compact('categories'));
     }
@@ -127,129 +140,125 @@ class PdfBookController extends Controller
     /**
      * Store a newly created PDF book in storage.
      */
-/**
- * Store a newly created PDF book in storage.
- */
-/**
- * Store a newly created PDF book in storage.
- */
-public function store(Request $request): RedirectResponse
-{
-    try {
-        // Validate input data
-        $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'category_id' => 'required|exists:pdf_categories,id',
-            'status' => 'nullable|boolean',
-            'version' => 'nullable|string|max:50',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:' . self::MAX_IMAGE_SIZE,
-            'file' => 'required|mimes:pdf|max:' . self::MAX_PDF_SIZE,
-        ]);
+    public function store(Request $request): RedirectResponse
+    {
+        try {
+            // Validate input data
+            $validated = $request->validate([
+                'title' => 'required|string|max:255',
+                'description' => 'nullable|string',
+                'category_id' => 'required|exists:pdf_categories,id',
+                'status' => 'nullable|boolean',
+                'version' => 'nullable|string|max:50',
+                'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:' . self::MAX_IMAGE_SIZE,
+                'file' => 'required|mimes:pdf|max:' . self::MAX_PDF_SIZE,
+            ]);
 
-        // Handle file uploads
-        $validated = $this->handleFileUploads($request, $validated);
+            // Handle file uploads
+            $validated = $this->handleFileUploads($request, $validated);
 
-        // Set default values
-        $validated['status'] = $request->has('status');
-        $validated['version'] = !empty($validated['version']) ? $validated['version'] : '1.0.0';
-        $validated['downloads'] = 0;
-        $validated['userview'] = 0;
-        $validated['uploaded_by'] = Auth::id(); // ADD THIS - get current logged in user
+            // Set default values
+            $validated['status'] = $request->has('status') && $request->status ? true : false;
+            $validated['version'] = !empty($validated['version']) ? $validated['version'] : '1.0.0';
+            $validated['downloads'] = 0;
+            $validated['userview'] = 0;
+            $validated['uploaded_by'] = Auth::id();
 
-        // Log for debugging
-        \Log::info('Creating PDF book with data:', $validated);
+            // Log for debugging
+            Log::info('Creating PDF book with data:', $validated);
 
-        // Create new PDF book
-        PdfBook::create($validated);
+            // Create new PDF book
+            PdfBook::create($validated);
 
-        return redirect()
-            ->route('pdf-books.index')
-            ->with('success', 'PDF Book created successfully!');
+            return redirect()
+                ->route('pdf-books.index')
+                ->with('success', 'PDF Book created successfully!');
 
-    } catch (\Illuminate\Validation\ValidationException $e) {
-        // Delete uploaded files if validation fails
-        if (isset($validated['image'])) {
-            Storage::disk('public')->delete($validated['image']);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            // Delete uploaded files if validation fails
+            if (isset($validated['image'])) {
+                Storage::disk('public')->delete($validated['image']);
+            }
+            if (isset($validated['file'])) {
+                Storage::disk('public')->delete($validated['file']);
+            }
+
+            return redirect()
+                ->back()
+                ->withErrors($e->validator)
+                ->withInput();
+
+        } catch (\Exception $e) {
+            // Delete uploaded files if creation fails
+            if (isset($validated['image'])) {
+                Storage::disk('public')->delete($validated['image']);
+            }
+            if (isset($validated['file'])) {
+                Storage::disk('public')->delete($validated['file']);
+            }
+
+            Log::error('Error creating PDF book: ' . $e->getMessage());
+            Log::error($e->getTraceAsString());
+
+            return redirect()
+                ->back()
+                ->with('error', 'Failed to create PDF book. Please try again.')
+                ->withInput();
         }
-        if (isset($validated['file'])) {
-            Storage::disk('public')->delete($validated['file']);
-        }
-
-        return redirect()
-            ->back()
-            ->withErrors($e->validator)
-            ->withInput();
-
-    } catch (\Exception $e) {
-        // Delete uploaded files if creation fails
-        if (isset($validated['image'])) {
-            Storage::disk('public')->delete($validated['image']);
-        }
-        if (isset($validated['file'])) {
-            Storage::disk('public')->delete($validated['file']);
-        }
-
-        \Log::error('Error creating PDF book: ' . $e->getMessage());
-        \Log::error($e->getTraceAsString());
-
-        return redirect()
-            ->back()
-            ->with('error', 'Failed to create PDF book. Please try again.')
-            ->withInput();
-    }
-}
-/**
- * Handle file uploads for store and update methods
- */
-private function handleFileUploads(Request $request, array $validated, ?PdfBook $pdfBook = null): array
-{
-    // Handle image upload
-    if ($request->hasFile('image')) {
-        // Validate image again (redundant but safe)
-        $request->validate([
-            'image' => 'image|mimes:jpeg,png,jpg,gif|max:' . self::MAX_IMAGE_SIZE,
-        ]);
-
-        // Delete old image if updating
-        if ($pdfBook && $pdfBook->image) {
-            Storage::disk('public')->delete($pdfBook->image);
-        }
-
-        // Store new image
-        $imagePath = $request->file('image')->store('pdf-books/images', 'public');
-
-        if (!$imagePath) {
-            throw new \Exception('Failed to upload image');
-        }
-
-        $validated['image'] = $imagePath;
     }
 
-    // Handle PDF file upload
-    if ($request->hasFile('file')) {
-        // Validate PDF again
-        $request->validate([
-            'file' => 'mimes:pdf|max:' . self::MAX_PDF_SIZE,
-        ]);
+    /**
+     * Handle file uploads for store and update methods
+     */
+    private function handleFileUploads(Request $request, array $validated, ?PdfBook $pdfBook = null): array
+    {
+        // Handle image upload
+        if ($request->hasFile('image')) {
+            // Validate image again (redundant but safe)
+            $request->validate([
+                'image' => 'image|mimes:jpeg,png,jpg,gif|max:' . self::MAX_IMAGE_SIZE,
+            ]);
 
-        // Delete old file if updating
-        if ($pdfBook && $pdfBook->file) {
-            Storage::disk('public')->delete($pdfBook->file);
+            // Delete old image if updating
+            if ($pdfBook && $pdfBook->image) {
+                Storage::disk('public')->delete($pdfBook->image);
+            }
+
+            // Store new image
+            $imagePath = $request->file('image')->store('pdf-books/images', 'public');
+
+            if (!$imagePath) {
+                throw new \Exception('Failed to upload image');
+            }
+
+            $validated['image'] = $imagePath;
         }
 
-        // Store new PDF
-        $filePath = $request->file('file')->store('pdf-books/files', 'public');
+        // Handle PDF file upload
+        if ($request->hasFile('file')) {
+            // Validate PDF again
+            $request->validate([
+                'file' => 'mimes:pdf|max:' . self::MAX_PDF_SIZE,
+            ]);
 
-        if (!$filePath) {
-            throw new \Exception('Failed to upload PDF file');
+            // Delete old file if updating
+            if ($pdfBook && $pdfBook->file) {
+                Storage::disk('public')->delete($pdfBook->file);
+            }
+
+            // Store new PDF
+            $filePath = $request->file('file')->store('pdf-books/files', 'public');
+
+            if (!$filePath) {
+                throw new \Exception('Failed to upload PDF file');
+            }
+
+            $validated['file'] = $filePath;
         }
 
-        $validated['file'] = $filePath;
+        return $validated;
     }
 
-    return $validated;
-}
     /**
      * Display the specified PDF book.
      * And increment user view count.
@@ -283,56 +292,53 @@ private function handleFileUploads(Request $request, array $validated, ?PdfBook 
     /**
      * Update the specified PDF book in storage.
      */
-  /**
- * Update the specified PDF book in storage.
- */
-public function update(Request $request, PdfBook $pdfBook): RedirectResponse
-{
-    try {
-        // Validate input data
-        $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'category_id' => 'required|exists:pdf_categories,id',
-            'status' => 'nullable|boolean',
-            'version' => 'nullable|string|max:50',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:' . self::MAX_IMAGE_SIZE,
-            'file' => 'nullable|mimes:pdf|max:' . self::MAX_PDF_SIZE,
-        ]);
+    public function update(Request $request, PdfBook $pdfBook): RedirectResponse
+    {
+        try {
+            // Validate input data
+            $validated = $request->validate([
+                'title' => 'required|string|max:255',
+                'description' => 'nullable|string',
+                'category_id' => 'required|exists:pdf_categories,id',
+                'status' => 'nullable|boolean',
+                'version' => 'nullable|string|max:50',
+                'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:' . self::MAX_IMAGE_SIZE,
+                'file' => 'nullable|mimes:pdf|max:' . self::MAX_PDF_SIZE,
+            ]);
 
-        // Handle file uploads and delete old files
-        $validated = $this->handleFileUploads($request, $validated, $pdfBook);
+            // Handle file uploads and delete old files
+            $validated = $this->handleFileUploads($request, $validated, $pdfBook);
 
-        // Set status
-        $validated['status'] = $request->has('status');
+            // Set status
+            $validated['status'] = $request->has('status') && $request->status ? true : false;
 
-        // Set version if not provided
-        if (empty($validated['version'])) {
-            $validated['version'] = $pdfBook->version ?? '1.0.0';
+            // Set version if not provided
+            if (empty($validated['version'])) {
+                $validated['version'] = $pdfBook->version ?? '1.0.0';
+            }
+
+            // Update book information
+            $pdfBook->update($validated);
+
+            return redirect()
+                ->route('pdf-books.index')
+                ->with('success', 'PDF Book updated successfully!');
+
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return redirect()
+                ->back()
+                ->withErrors($e->validator)
+                ->withInput();
+
+        } catch (\Exception $e) {
+            Log::error('Error updating PDF book: ' . $e->getMessage());
+
+            return redirect()
+                ->back()
+                ->with('error', 'Failed to update PDF book. Please try again.')
+                ->withInput();
         }
-
-        // Update book information
-        $pdfBook->update($validated);
-
-        return redirect()
-            ->route('pdf-books.index')
-            ->with('success', 'PDF Book updated successfully!');
-
-    } catch (\Illuminate\Validation\ValidationException $e) {
-        return redirect()
-            ->back()
-            ->withErrors($e->validator)
-            ->withInput();
-
-    } catch (\Exception $e) {
-        Log::error('Error updating PDF book: ' . $e->getMessage());
-
-        return redirect()
-            ->back()
-            ->with('error', 'Failed to update PDF book. Please try again.')
-            ->withInput();
     }
-}
 
     /**
      * Remove the specified PDF book from storage.
@@ -404,7 +410,6 @@ public function update(Request $request, PdfBook $pdfBook): RedirectResponse
         }
     }
 
-
     /**
      * Delete book files from storage
      */
@@ -412,11 +417,11 @@ public function update(Request $request, PdfBook $pdfBook): RedirectResponse
     {
         $defaultFiles = ['default.png', 'sample.pdf'];
 
-        if ($pdfBook->image && !in_array($pdfBook->image, $defaultFiles)) {
+        if ($pdfBook->image && !in_array(basename($pdfBook->image), $defaultFiles)) {
             Storage::disk('public')->delete($pdfBook->image);
         }
 
-        if ($pdfBook->file && !in_array($pdfBook->file, $defaultFiles)) {
+        if ($pdfBook->file && !in_array(basename($pdfBook->file), $defaultFiles)) {
             Storage::disk('public')->delete($pdfBook->file);
         }
     }

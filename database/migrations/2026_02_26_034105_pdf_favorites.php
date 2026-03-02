@@ -23,11 +23,12 @@ return new class extends Migration
             $table->timestamps();
 
             // Prevent duplicate favorites
-            $table->unique(['user_id', 'pdf_book_id'], 'pdf_favorites_user_book_unique'); // FIXED: unique name
+            $table->unique(['user_id', 'pdf_book_id'], 'pdf_favorites_user_book_unique');
 
             // Indexes
             $table->index('user_id');
             $table->index('pdf_book_id');
+            $table->index('created_at');
         });
     }
 

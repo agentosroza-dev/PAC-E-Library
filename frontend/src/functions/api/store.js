@@ -38,6 +38,7 @@ const store = createStore({
     getters: {
         isAuthenticated: (state) => !!state.user,
         getUser: (state) => state.user,
+        getUserId: (state) => state.user?.id || null, // ADD THIS GETTER
         getUserName: (state) => state.user?.name || 'Guest',
         getUserEmail: (state) => state.user?.email || '',
         getUserPhoto: (state) => state.user?.photo || '/default-avatar.png',

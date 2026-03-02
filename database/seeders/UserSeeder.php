@@ -27,37 +27,16 @@ class UserSeeder extends Seeder
         // Create additional test users for chat interactions
         $users = [
             [
-                'name' => 'Alice Johnson',
-                'email' => 'alice@example.com',
-                'password' => Hash::make('password'),
-                'email_verified_at' => now(),
-                'level' => 'user',
-            ],
-            [
                 'name' => 'Bob Smith',
                 'email' => 'bob@example.com',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('112233'),
                 'email_verified_at' => now(),
-                'level' => 'user',
+                'level' => 'admin',
             ],
             [
-                'name' => 'Charlie Brown',
-                'email' => 'charlie@example.com',
-                'password' => Hash::make('password'),
-                'email_verified_at' => now(),
-                'level' => 'user',
-            ],
-            [
-                'name' => 'Diana Prince',
-                'email' => 'diana@example.com',
-                'password' => Hash::make('password'),
-                'email_verified_at' => now(),
-                'level' => 'user',
-            ],
-            [
-                'name' => 'Edward Norton',
-                'email' => 'edward@example.com',
-                'password' => Hash::make('password'),
+                'name' => 'Dara Brown',
+                'email' => 'dara@example.com',
+                'password' => Hash::make('112233'),
                 'email_verified_at' => now(),
                 'level' => 'user',
             ],

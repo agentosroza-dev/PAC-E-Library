@@ -1,5 +1,5 @@
 <?php
-// database/migrations/2024_01_01_000001_create_categories_table.php
+// database/migrations/2024_01_01_000001_create_pdf_categories_table.php
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -11,17 +11,18 @@ return new class extends Migration
     {
         Schema::create('pdf_categories', function (Blueprint $table) {
             $table->id();
-            $table->string('title', 1024);
+            $table->string('title');
             $table->text('description')->nullable();
+            $table->boolean('status')->default(true); // This column was missing
             $table->timestamps();
 
-            // Add indexes for better performance
             $table->index('title');
+            $table->index('status');
         });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('pdf_categories'); // FIXED: Changed from 'categories' to 'pdf_categories'
+        Schema::dropIfExists('pdf_categories');
     }
 };

@@ -15,14 +15,14 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->boolean('status')->default(false);
             $table->string('image')->nullable();
-            $table->string('file');
+            $table->string('file')->nullable();
             $table->integer('downloads')->default(0);
             $table->integer('userview')->default(0);
             $table->string('version')->default('1.0.0');
 
-            // Foreign keys - FIXED: changed 'categories' to 'pdf_categories'
+            // Foreign keys
             $table->foreignId('category_id')
-                  ->constrained('pdf_categories') // FIXED: was 'categories', now 'pdf_categories'
+                  ->constrained('pdf_categories')
                   ->cascadeOnDelete();
 
             $table->foreignId('uploaded_by')
@@ -37,6 +37,8 @@ return new class extends Migration
             $table->index('category_id');
             $table->index('uploaded_by');
             $table->index('created_at');
+            $table->index('downloads');
+            $table->index('userview');
         });
     }
 

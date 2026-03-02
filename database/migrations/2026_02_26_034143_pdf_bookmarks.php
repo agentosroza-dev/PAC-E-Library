@@ -29,9 +29,10 @@ return new class extends Migration
             $table->index('user_id');
             $table->index('pdf_book_id');
             $table->index('page_number');
+            $table->index('created_at');
 
             // Composite index for finding user bookmarks by page
-            $table->index(['user_id', 'pdf_book_id', 'page_number'], 'pdf_bookmarks_user_book_page_index'); // FIXED: index name
+            $table->index(['user_id', 'pdf_book_id', 'page_number'], 'pdf_bookmarks_user_book_page_index');
         });
     }
 

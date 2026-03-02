@@ -26,12 +26,13 @@ return new class extends Migration
             $table->timestamps();
 
             // Prevent duplicate uploader favorites
-            $table->unique(['uploader_id', 'pdf_book_id'], 'pdf_uploader_favorites_unique'); // FIXED: unique name
+            $table->unique(['uploader_id', 'pdf_book_id'], 'pdf_uploader_favorites_unique');
 
             // Indexes
             $table->index('priority');
             $table->index('uploader_id');
             $table->index('pdf_book_id');
+            $table->index('created_at');
         });
     }
 

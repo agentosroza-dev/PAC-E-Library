@@ -67,7 +67,7 @@
                     </div>
                     <div>
                         <span class="text-muted small text-uppercase tracking-wider">ប្រភេទ</span>
-                        <h3 class="fw-bold mb-0 display-6">{{ number_format($statistics['categories_count']) }}</h3>
+                        {{-- <h3 class="fw-bold mb-0 display-6">{{ number_format($statistics['categories_count']) }}</h3> --}}
                         <small class="text-info">
                             <i class="bi bi-book me-1"></i>ច្រើនប្រភេទ
                         </small>

@@ -61,67 +61,39 @@ Route::middleware('auth:sanctum')->group(function () {
     |--------------------------------------------------------------------------
     */
     Route::prefix('v1')->name('api.')->group(function () {
+        Route::controller(PdfBookApiController::class)->group(function () {
+            // Book routes
+            Route::get('/pdf-books', 'index');
+            Route::get('/pdf-books/popular', 'getPopular');
+            Route::get('/pdf-books/{id}', 'show');
+            Route::get('/pdf-books/{id}/download', 'download')->name('pdf-books.download');
 
-        /*
-        |----------------------------------------------------------------------
-        | PDF Books - Public Read Operations
-        |----------------------------------------------------------------------
-        */
+            // Category routes - FIXED: Using 'pdf-categories' to match controller
+            Route::get('/pdf-categories', 'getCategories');
+            Route::get('/pdf-categories/{categoryId}/books', 'getByCategory');
+        });
+        Route::middleware('auth:sanctum')->group(function () {
+            Route::controller(PdfBookApiController::class)->prefix('pdf-books')->group(function () {
+                Route::post('/', 'store');
+                Route::put('/{id}', 'update'); // POST with _method=PUT for file upload
+                Route::delete('/{id}', 'destroy');
+                Route::post('/{id}/toggle-status', 'toggleStatus');
+                Route::get('/my/uploads', 'getMyUploads');
+                Route::get('/{id}/statistics', 'getStatistics');
+            });
+        });
 
-        // Get all PDF books (with filters & pagination)
-        Route::get('/pdf-books', [PdfBookApiController::class, 'index'])
-            ->name('pdf-books.index');
+        // In your authenticated routes group
+        Route::middleware('auth:sanctum')->group(function () {
+            // Favorite routes
+            Route::post('/pdf-books/{id}/favorite', [PdfBookApiController::class, 'toggleFavorite']);
+            Route::get('/favorites', [PdfBookApiController::class, 'getMyFavorites']);
+            Route::get('/pdf-books/{id}/favorite/check', [PdfBookApiController::class, 'checkFavorite']);
+            Route::get('/favorites/statistics', [PdfBookApiController::class, 'getFavoriteStatistics']);
 
-        // Get single PDF book details
-        Route::get('/pdf-books/{id}', [PdfBookApiController::class, 'show'])
-            ->name('pdf-books.show');
-
-        // Download PDF file
-        Route::get('/pdf-books/{id}/download', [PdfBookApiController::class, 'download'])
-            ->name('pdf-books.download');
-
-        /*
-        |----------------------------------------------------------------------
-        | Categories Routes
-        |----------------------------------------------------------------------
-        */
-
-        // Get all categories (for dropdown/filter)
-        Route::get('/categories', [PdfBookApiController::class, 'getCategories'])
-            ->name('categories.index');
-
-        // Get all books by category
-        Route::get('/categories/{categoryId}/books', [PdfBookApiController::class, 'getByCategory'])
-            ->name('categories.books');
-
-        /*
-        |----------------------------------------------------------------------
-        | PDF Books - Protected Write Operations (Requires Authentication)
-        |----------------------------------------------------------------------
-        */
-
-        // Create new PDF book
-        Route::post('/pdf-books', [PdfBookApiController::class, 'store'])
-            ->name('pdf-books.store');
-
-        // Update existing PDF book
-        Route::put('/pdf-books/{id}', [PdfBookApiController::class, 'update'])
-            ->name('pdf-books.update');
-
-        // Delete PDF book
-        Route::delete('/pdf-books/{id}', [PdfBookApiController::class, 'destroy'])
-            ->name('pdf-books.destroy');
-
-        // Toggle book active/inactive status
-        Route::patch('/pdf-books/{id}/toggle-status', [PdfBookApiController::class, 'toggleStatus'])
-            ->name('pdf-books.toggle-status');
+            // Other authenticated routes...
+        });
     });
-
-    /*
-    |--------------------------------------------------------------------------
-    | Authenticated User Management
-    |--------------------------------------------------------------------------
-    */
 
     // User logout (invalidate current token)
     Route::post('/signout', [AuthController::class, 'signout']);
